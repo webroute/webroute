@@ -1,4 +1,0 @@
-*/10 0-22 * * * /root/scripts/ipcad.sh
-05 23 * * * /root/scripts/create_stat.py
-50 23 * * * /root/scripts/base_backup.sh
-
