@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use DBI;
+my $db_name = "webroute";
+my $db_user = "webroute";
+my $db_pass = "wbr";
+my ($ip,$iface) = @ARGV[4,0];
+my $DBH = DBI->connect("DBI:mysql:$db_name:localhost",$db_user,$db_pass) or die "Error connecting to database";
+
+my $STH = $DBH->prepare("select speed, ospeed from conn_speed where ip='$ip'");
+$STH->execute;
+my ($speed) = $STH->fetchrow_array;
+$STH->finish;
+
+my $STH2 = $DBH->prepare("select ospeed from conn_speed where ip='$ip'");
+$STH2->execute;
+my ($ospeed) = $STH2->fetchrow_array;
+$STH2->finish;
+
+system ("/sbin/tc qdisc del dev ".$iface." root");
+system ("/sbin/tc qdisc del dev ".$iface." handle ffff: ingress");
+if ($speed > 0) {
+system ("/sbin/tc qdisc add dev ".$iface." root tbf rate ".$speed."kbit latency 100ms burst ".$speed."kbit");
+}
+if ($ospeed > 0) {
+system ("/sbin/tc qdisc add dev ".$iface." handle ffff: ingress");
+system ("/sbin/tc filter add dev ".$iface." parent ffff: protocol ip prio 50 u32 match ip src 0.0.0.0/0 police rate ".$ospeed."kbit burst ".$ospeed."kbit drop flowid :1");
+}
+$DBH->disconnect;

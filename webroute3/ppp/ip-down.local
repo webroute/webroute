@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/sbin/tc qdisc del dev $1 root
+/sbin/tc qdisc del dev $1 handle ffff: ingress

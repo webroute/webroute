@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os,zipfile
+from shutil import copy,rmtree
+arh = zipfile.ZipFile('/tmp/lists.zip', 'r')
+arh.extractall('/tmp/')
+src = "/tmp/usr/local/rejik3/dbl/lists/"
+dst = "/etc/squid/banlist/"
+copy(src + 'audio-video.pcre',   dst + 'audio-video/pcre')
+copy(src + 'banner.pcre',        dst + 'baner/pcre')
+copy(src + 'virus-detect.pcre',  dst + 'virus-detect/pcre')
+copy(src + 'porno.pcre',         dst + 'porno/pcre')
+copy(src + 'icq.pcre',           dst + 'icq/pcre')
+copy(src + 'warez.urls',         dst + 'warez/urls')
+copy(src + 'torrents.urls',      dst + 'torrents/urls')
+copy(src + 'porno.urls',         dst + 'porno/urls')
+copy(src + 'phishing.urls',      dst + 'phishing/urls')
+copy(src + 'chats.urls',         dst + 'chats/urls')
+copy(src + 'avto-moto.urls',     dst + 'avto-moto/urls')
+copy(src + 'web-proxy.urls',     dst + 'web-proxy/urls')
+copy(src + 'virus-detect.urls',  dst + 'virus-detect/urls')
+copy(src + 'dating.urls',        dst + 'dating/urls')
+copy(src + 'spyware.urls',       dst + 'spyware/urls')
+copy(src + 'online-games.urls',  dst + 'online-games/urls')
+copy(src + 'extremism_rf.urls',  dst + 'extremism_rf/urls')
+copy(src + 'banner.urls',        dst + 'baner/urls')
+copy(src + 'audio-video.urls',   dst + 'audio-video/urls')
+copy(src + 'web-mail.urls',      dst + 'web-mail/urls')
+copy(src + 'socnet.urls',        dst + 'socnet/urls')
+copy(src + 'photogallery.urls',  dst + 'photogallery/urls')
+copy(src + 'icq.urls',           dst + 'icq/urls')
+copy(src + 'jobsearch.urls',     dst + 'jobsearch/urls')
+rmtree('/tmp/usr')
+os.remove('/tmp/lists.zip')
+os.system('/bin/chmod -R 777 /etc/squid/banlist/')

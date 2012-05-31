@@ -1,0 +1,2 @@
+# Change the source IP and port to what is used on your network
+OPTIONS="-w /var/flow-tools -n 720 -N 0 -S 5 0/127.0.0.1/2055 -R /usr/local/bin/flow2sql.py"

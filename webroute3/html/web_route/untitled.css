@@ -1,0 +1,265 @@
+@charset "UTF-8";
+.tmpl2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	background-color: #ECECEC;
+	margin: 0px;
+	padding: 0px;
+}
+
+
+
+#jsddm
+{	margin: 0;
+	padding: 0}
+	
+	#jsddm li
+	{	float: left;
+		list-style: none;
+		font: 12px Tahoma, Arial}
+
+	#jsddm li a
+	{	display: block;
+		background:url(/web_route/img/menu_space.png);
+		padding: 9px 12px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		width: 78px;
+		color:#FFFFFF;
+		white-space: nowrap}
+
+	#jsddm li a:hover
+	{	background:#000066}
+		
+		#jsddm li ul
+		{	margin: 0;
+			padding: 0;
+			position: absolute;
+			visibility: hidden;
+			border-top: 1px solid white}
+		
+		#jsddm li ul li
+		{	float: none;
+			display: inline}
+		
+		#jsddm li ul li a
+		{	width: auto;
+			background: black}
+		
+		#jsddm li ul li a:hover
+		{	background:#000066}
+		
+#jsddm2
+{	margin: 0;
+	padding: 0}
+	
+	#jsddm2 li
+	{	float: left;
+		list-style: none;
+		font: 12px Tahoma, Arial}
+
+	#jsddm2 li a
+	{	display: block;
+		background:url(/web_route/img/menu_space.png);
+		padding: 9px 12px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		width: 140px;
+		color:#FFFFFF;
+		white-space: nowrap}
+
+	#jsddm2 li a:hover
+	{	background:#000066}
+		
+		#jsddm2 li ul
+		{	margin: 0;
+			padding: 0;
+			position: absolute;
+			visibility: hidden;
+			border-top: 1px solid white}
+		
+		#jsddm2 li ul li
+		{	float: none;
+			display: inline}
+		
+		#jsddm2 li ul li a
+		{	width: auto;
+			background: black}
+		
+		#jsddm2 li ul li a:hover
+		{	background: #000066}
+		
+#jsddm3
+{	margin: 0;
+	padding: 0}
+	
+	#jsddm3 li
+	{	float: left;
+		list-style: none;
+		font: 12px Tahoma, Arial}
+
+	#jsddm3 li a
+	{	display: block;
+		background:url(/web_route/img/menu_space.png);
+		padding: 9px 12px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		width: 40px;
+		color:#FFFFFF;
+		white-space: nowrap}
+
+	#jsddm3 li a:hover
+	{	background:#000066}
+		
+		#jsddm3 li ul
+		{	margin: 0;
+			padding: 0;
+			position: absolute;
+			visibility: hidden;
+			border-top: 1px solid white}
+		
+		#jsddm3 li ul li
+		{	float: none;
+			display: inline}
+		
+		#jsddm3 li ul li a
+		{	width: auto;
+			background: black}
+		
+		#jsddm3 li ul li a:hover
+		{	background: #000066}
+		
+		
+#jsddm4
+{	margin: 0;
+	padding: 0}
+	
+	#jsddm4 li
+	{	float: left;
+		list-style: none;
+		font: 12px Tahoma, Arial}
+
+	#jsddm4 li a
+	{	display: block;
+		background:url(/web_route/img/menu_space.png);
+		padding: 9px 12px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		width: 86px;
+		color:#FFFFFF;
+		white-space: nowrap}
+
+	#jsddm4 li a:hover
+	{	background:#000066}
+		
+		#jsddm4 li ul
+		{	margin: 0;
+			padding: 0;
+			position: absolute;
+			visibility: hidden;
+			border-top: 1px solid white}
+		
+		#jsddm4 li ul li
+		{	float: none;
+			display: inline}
+		
+		#jsddm4 li ul li a
+		{	width: auto;
+			background: black}
+		
+		#jsddm4 li ul li a:hover
+		{	background: #000066}
+
+#jsddm5
+{	margin: 0;
+	padding: 0}
+
+	#jsddm5 li
+	{	float: left;
+		list-style: none;
+		font: 12px Tahoma, Arial}
+
+	#jsddm5 li a
+	{	display: block;
+		background:url(/web_route/img/menu_space.png);
+		padding: 9px 12px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		width: 124px;
+		color:#FFFFFF;
+		white-space: nowrap}
+
+	#jsddm5 li a:hover
+	{	background:#000066}
+
+		#jsddm5 li ul
+		{	margin: 0;
+			padding: 0;
+			position: absolute;
+			visibility: hidden;
+			border-top: 1px solid white}
+
+		#jsddm5 li ul li
+		{	float: none;
+			display: inline}
+
+		#jsddm5 li ul li a
+		{	width: auto;
+			background: black}
+
+		#jsddm5 li ul li a:hover
+		{	background:#000066}
+
+#jsddm6
+{	margin: 0;
+	padding: 0}
+
+	#jsddm6 li
+	{	float: left;
+		list-style: none;
+		font: 12px Tahoma, Arial}
+
+	#jsddm6 li a
+	{	display: block;
+		background:url(/web_route/img/menu_space.png);
+		padding: 9px 12px;
+		text-decoration: none;
+		border-right: 1px solid white;
+		width: 105px;
+		color:#FFFFFF;
+		white-space: nowrap}
+
+	#jsddm6 li a:hover
+	{	background:#000066}
+
+		#jsddm6 li ul
+		{	margin: 0;
+			padding: 0;
+			position: absolute;
+			visibility: hidden;
+			border-top: 1px solid white}
+
+		#jsddm6 li ul li
+		{	float: none;
+			display: inline}
+
+		#jsddm6 li ul li a
+		{	width: auto;
+			background: black}
+
+		#jsddm6 li ul li a:hover
+		{	background:#000066}
+
+		.r1, .r2,  .r3, .r4 { 
+  display:  block; /* Блочный элемент */
+  height:  1px; /* Высота */
+  background:  #EDF3FE; /* Цвет фона */
+  overflow: hidden; /* Для IE6 */
+}
+.r1 { margin: 0 5px; }
+.r2 { margin: 0 3px; }
+.r3 { margin: 0 2px; }
+.r4 { margin: 0 1px; height: 3px; }
