@@ -134,7 +134,7 @@ chkconfig vnstat on
 chkconfig sshd on
 chkconfig pptpd on
 chkconfig flow-capture on
-
+echo 'l7-filter -f /etc/l7-filter.conf -z'
 echo 'detecting sensors' >> wbr.log
 sensors-detect
 
