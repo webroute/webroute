@@ -1,28 +1,20 @@
 <?php
-if ($_SESSION['role'] != 'admin')
-{
-	if($_SESSION['role'] != 'statistic')
-    {
+if ($_SESSION['role'] != 'admin'){
+	if($_SESSION['role'] != 'statistic'){
         @header('Location: /web_route');
-    }else
-    {
+    }else{
         goto start;
     }
-}
-else
-{
+}else{
     start:
     $db_host = 'localhost';
 	$link = mysql_connect($db_host, 'webroute', 'wbr') or die(mysql_error());
 	mysql_select_db('webroute', $link) or die(mysql_error());
 	mysql_set_charset('utf8',$link);
     $version = "SELECT `value`FROM `config` WHERE `key`='version'";
-    $uid = "SELECT `value` FROM `config` WHERE `key`='bl_login'";
     $version = mysql_fetch_assoc(mysql_query($version));
-    $uid = mysql_fetch_assoc(mysql_query($uid));
     $version = $version['value'];
-    $uid = $uid['value'];
-    if (isset($_GET['vs']) and $_GET['vs'] == 131 and $_SESSION['login'] == 'master'){
+    if (isset($_GET['edit']) and $_SESSION['login'] == 'master'){
         $vs = 1;
     }else{
         $vs = 0;
@@ -33,7 +25,7 @@ else
     echo "<h3>Версия: ";
     echo $version;
     echo "</h3>";
-    echo "<!--- copyright 2011-2012 Matyushin Evgeniy ---> </td></tr>";
+    echo "</font></h3><!--- copyright 2011-2012 Matyushin Evgeniy ---> </td></tr>";
     if ($vs == 1){
     if(isset($_POST['save_pref'])){
         $conf = "select `key` from `config`";

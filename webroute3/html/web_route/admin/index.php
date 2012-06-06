@@ -113,6 +113,8 @@ print <<<HTML
         <ul>
             <li><a href="{$_SERVER['PHP_SELF']}?act=speed_limit">Ограничение скорости</a></li>
             <li><a href="{$_SERVER['PHP_SELF']}?act=quota">Назначение квот</a></li>
+            <li><a href="{$_SERVER['PHP_SELF']}?act=l7proto">Протоколы L7</a></li>
+            <li><a href="{$_SERVER['PHP_SELF']}?act=l7filter">Фильтрация L7</a></li>
         </ul>
     </li>
 </ul>
@@ -210,6 +212,8 @@ HTML;
             elseif($_GET['act'] == 'adming'){include_once('../instructions/admin.html');}
             elseif($_GET['act'] == 'unban_pref'){include_once('../lib/unban_pref.php');}
             elseif($_GET['act'] == 'rep_settings'){include_once('../lib/rep_settings.php');}
+            elseif($_GET['act'] == 'l7proto'){include_once('../lib/l7proto.php');}
+            elseif($_GET['act'] == 'l7filter'){include_once('../lib/l7filter.php');}
             elseif($_GET['act'] == 'exit')
             {
                 session_destroy();

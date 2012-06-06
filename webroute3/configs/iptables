@@ -3,10 +3,12 @@
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 :QUOTA - [0:0]
+:l7filter - [0:0]
 ##########################################################
 -A FORWARD -j NETFLOW
 -A INPUT -j NETFLOW
 -A OUTPUT -j NETFLOW
+-A FORWARD -j l7filter
 -A FORWARD -i lo -j ACCEPT
 -A FORWARD -i tun+ -j ACCEPT
 -A FORWARD -i eth0 -j ACCEPT
@@ -30,6 +32,7 @@ COMMIT
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
+-A FORWARD -j NFQUEUE --queue-num 0
 -A FORWARD -d 192.168.100.0/24 -j MARK --set-mark 0x1
 -A OUTPUT -d 192.168.100.0/24 -j MARK --set-mark 0x1
 COMMIT

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+####--- version 3.1.0 ---####
 
 import os, MySQLdb
 from datetime import date
@@ -179,6 +180,20 @@ class Controller(object):
                         self.ipt_reload()
                         reload_ipt = 1
         if reload_ipt == 0: self.ipt_reload()
+
+    def l7_filter(self):
+        query_select = "SELECT `ip`, `proto_code` FROM `l7filter`"
+        self.cursor.execute(query_select)
+        select = self.cursor.fetchall()
+        os.system('/sbin/iptables -t filter -F l7filter')
+        if select:
+            for rec in select:
+                adr    = self.ppp_net + str(rec[0])
+                proto  = rec[1]
+                rule_s = '/sbin/iptables -t filter -A l7filter -s '+ adr +' -m mark --mark '+ proto +' -j DROP'
+                rule_d = '/sbin/iptables -t filter -A l7filter -d '+ adr +' -m mark --mark '+ proto +' -j DROP'
+                os.system(rule_d)
+                os.system(rule_s)
 
 class Base(object):
     def __init__(self):

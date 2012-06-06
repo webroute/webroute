@@ -1,6 +1,6 @@
 <?php
 echo "Выберите дату, месяц или год за который необходим отчет.";
-echo "<br/><br/><table border=0><tr><td>";
+echo "<br/><br/><table border=0><tr valign='top'><td>";
 echo '<form method="POST"><select name="Day">';
 echo '<option value="All">Весь</option>';
 $i=1;
@@ -44,10 +44,10 @@ if (date("n") > 6){
     echo '<option value="'.$lyear.'">'.$lyear.'</option>';
 }
 echo '</select>';
-echo '<br><br></td><td>';
-echo '<button type="submit" name="submit">Показать</button>';
+echo '</td><td valign="top">';
+echo '<input type="submit" name="submit" value="Показать">';
 echo '</form>';
-echo '<br><br></td></tr></table>';
+echo '</td></tr></table>';
 if(isset($_POST['submit']))
 {
     $db_host = 'localhost';

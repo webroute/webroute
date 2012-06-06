@@ -15,6 +15,7 @@ print <<<HTM2
 <a href="/web_route/$pwd/index.php?act=pppoe-mac">Настройка подключения через PPPOE для Mac OS X.</a><br/>
 <a href="/web_route/$pwd/index.php?act=pptp-mac">Настройка подключения через PPTP для Mac OS X.</a><br/>
 <a href="/web_route/$pwd/index.php?act=adming">Руководство по использованию системы.</a><br/>
+<a href="http://webroute.org">Официальный сайт программы(форум/тех. поддержка).</a><br/>
 </td>
 </tr>
 <tr>

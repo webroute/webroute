@@ -20,7 +20,6 @@ else
         $ip_n = mysql_query($ip_q);
         $ip = mysql_fetch_assoc($ip_n);
         $usr_ip = $ip['ip'];
-        //echo $usr_ip;
         $quer = "INSERT INTO  `webroute`.`rej_exc` (`cat_name` ,`user_ip` ,`user_name`)VALUES ('$cat_add', '$usr_ip', '$usr_add')";
         mysql_query($quer);
         include "sql_to_redirector.php";

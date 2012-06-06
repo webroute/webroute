@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## This script mean by default that you have the 64 bit Scientific Linux 6 
+## This script mean by default that you have the Scientific Linux 6 
 ## (not tested but it may work on Centos and RHEL) installed in minimal installation.
 ## If you want that dhcp work properly you must configure your eth0 interface to 192.168.77.1/24 ip.
 ## Remove the next 4 lines(begins whith 'exit') and execute this script to begin installation.
@@ -19,7 +19,7 @@ exit # Remember that sshd will work on port >>> 12345 <<< and enter username wil
 echo "Starting installation"
 
 echo 'installing packages' >> wbr.log
-yum install -y --nogpgcheck ./pkgs/epel-release-6-6.noarch.rpm
+yum install -y --nogpgcheck ./pkgs/epel-release-6-7.noarch.rpm
 yum install -y ppp htop vnstat squid mysql mysql-server httpd php phpmyadmin php-domxml lightsquid lightsquid-apache
 yum install -y perl-DBD-MySQL MySQL-python dnsmasq mc setuptool ntsysv screen chkconfig openvpn iptraf-ng lm_sensors smartmontools
 
@@ -41,7 +41,6 @@ passwd aist
 cp -f ./configs/sshd_config /etc/ssh
 
 echo 'for scripts' >> wbr.log
-cp -f ./scripts/final_stat.py /usr/local/bin/
 cp -f ./scripts/flow2sql.py /usr/local/bin/
 cp -f ./scripts/traflib3.py /usr/local/lib/
 chmod +r /usr/local/lib/*
@@ -56,6 +55,7 @@ cp -rf ./html/* /var/www/html/
 
 echo 'for iptables' >> wbr.log
 cp -f ./configs/iptables /etc/sysconfig/iptables
+cp -f ./configs/iptables-config /etc/sysconfig/
 
 echo 'for dnsmasq' >> wbr.log
 cp -f ./configs/dnsmasq.conf /etc/dnsmasq.conf
@@ -66,9 +66,6 @@ vnstat -u -i eth1
 echo 'for squid' >> wbr.log
 cp -f ./configs/squid.conf /etc/squid/
 chown -R 777 /etc/squid/banlist/
-
-echo 'for iptables-config' >> wbr.log
-cp -f ./configs/iptables-config /etc/sysconfig/
 
 echo 'for flow-capture' >> wbr.log
 cp -f ./configs/flow-capture /etc/sysconfig/
@@ -84,7 +81,6 @@ cp -f ./configs/sudoers /etc/
 
 echo 'for lightsquid' >> wbr.log
 cp -f ./lightsquid/lightsquid.cfg /etc/lightsquid
-cp -rf ./lightsquid/tpl/* /usr/share/lightsquid/tpl/
 cp -rf ./lightsquid/exmpl/* /var/lightsquid
 touch /etc/lightsquid/skipuser.cfg
 touch /etc/lightsquid/realname.cfg
@@ -102,9 +98,6 @@ service mysqld start
 echo "grant all on webroute.* to webroute@localhost identified by 'wbr';" | mysql -u root
 mysql_secure_installation
 
-echo 'setup cron' >> wbr.log
-cat ./configs/cron >> /var/spool/cron/root
-
 echo "seting ACL's" >> wbr.log
 setfacl -m u:apache:rwx /etc/lightsquid/
 setfacl -m u:apache:rwx /etc/ppp/
@@ -115,6 +108,7 @@ setfacl -m u:apache:rwx /etc/squid/redirector.conf
 setfacl -m u:apache:rwx /etc/lightsquid/lightsquid.cfg
 setfacl -m u:apache:rwx /etc/lightsquid/realname.cfg
 setfacl -m u:apache:rwx /etc/lightsquid/skipuser.cfg
+setfacl -m u:apache:rwx /etc/l7-filter.conf
 mkdir /etc/squid/banlist/usr/2
 mkdir /etc/squid/banlist/den/2
 chmod -R 777 /etc/squid/banlist/
