@@ -188,7 +188,10 @@ class Controller(object):
         os.system('/sbin/iptables -t filter -F l7filter')
         if select:
             for rec in select:
-                adr    = self.ppp_net + str(rec[0])
+                self.cursor.execute(self.ppp_net)
+                ppp = self.cursor.fetchone()
+                ppp = ppp[0]
+                adr    = ppp + str(rec[0])
                 proto  = rec[1]
                 rule_s = '/sbin/iptables -t filter -A l7filter -s '+ adr +' -m mark --mark '+ proto +' -j DROP'
                 rule_d = '/sbin/iptables -t filter -A l7filter -d '+ adr +' -m mark --mark '+ proto +' -j DROP'

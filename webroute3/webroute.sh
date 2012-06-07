@@ -42,9 +42,11 @@ cp -f ./configs/sshd_config /etc/ssh
 
 echo 'for scripts' >> wbr.log
 cp -f ./scripts/flow2sql.py /usr/local/bin/
+cp -f ./scripts/check.py /usr/local/bin/
 cp -f ./scripts/traflib3.py /usr/local/lib/
-chmod +r /usr/local/lib/*
-chmod +x /usr/local/bin/*
+rm -f /usr/local/lib/*.pyc
+chmod +rw /usr/local/lib/*
+chmod +rx /usr/local/bin/*
 
 echo 'for sysctrl' >> wbr.log
 cp -f ./configs/sysctl.conf /etc/
@@ -52,6 +54,8 @@ sysctl -p
 
 echo 'for html' >> wbr.log
 cp -rf ./html/* /var/www/html/
+
+cat ./configs/cron >> /var/spool/cron/root
 
 echo 'for iptables' >> wbr.log
 cp -f ./configs/iptables /etc/sysconfig/iptables
@@ -115,6 +119,7 @@ chmod -R 777 /etc/squid/banlist/
 
 mv -f ./pkgs/lists.zip /tmp/
 /usr/bin/python ./configs/dl_blacklists.py
+/usr/bin/python ./configs/db.py
 
 echo 'checking services at startup' >> wbr.log
 chkconfig crond on

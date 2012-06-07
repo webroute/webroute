@@ -14,11 +14,8 @@ file_path = "/var/flow-tools/"+file
 os.system("""/usr/bin/flow-export -f3 -m DOCTETS,SRCADDR,DSTADDR -u "webroute:wbr:localhost:3306:webroute:ip" < """ + file_path)
 os.remove(file_path)
 ctrl = Controller()
-ctrl.ipt_reload()
-ctrl.l7_filter()
 t = date.today()
 ctrl.agregate()
-ctrl.check_quota(t.strftime("%Y"), t.strftime("%m"))
 if now.hour == 23 and now.minute + 2 >= 60:
     base = Base()
     today = str(date.today())
