@@ -13,10 +13,11 @@ else
     mysql_set_charset('utf8',$link);
 
     function sql_to_l7filter(){
-        $queryy = "SELECT `code`, `name` FROM `l7protocols` WHERE `enabled`=1";
+        $queryy = "SELECT `code`, `name` FROM `l7protocols` WHERE `enabled`=1 ORDER BY `name`";
         $ress = mysql_query($queryy);
         $file = "/etc/l7-filter.conf";
         $file = fopen($file, 'w');
+        fwrite($file, "x11    56\n");
         while($reess = mysql_fetch_assoc($ress)){
             $code = $reess['code'];
             $name = $reess['name'];

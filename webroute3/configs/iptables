@@ -8,12 +8,11 @@
 -A FORWARD -j NETFLOW
 -A INPUT -j NETFLOW
 -A OUTPUT -j NETFLOW
+-A FORWARD -j QUOTA
 -A FORWARD -j l7filter
 -A FORWARD -i lo -j ACCEPT
 -A FORWARD -i tun+ -j ACCEPT
 -A FORWARD -i eth0 -j ACCEPT
--A FORWARD -i ppp+ -j QUOTA
--A FORWARD -o ppp+ -j QUOTA
 -A FORWARD -i ppp+ -j ACCEPT
 -A FORWARD -m state --state ESTABLISHED -j ACCEPT
 -A FORWARD -m state --state RELATED -j ACCEPT
