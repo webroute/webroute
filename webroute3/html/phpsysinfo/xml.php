@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: xml.php 390 2010-11-11 14:19:21Z jacky672 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  
@@ -35,13 +35,33 @@ if (isset($_GET['plugin'])) {
     $plugin = basename(htmlspecialchars($_GET['plugin']));
     if ($plugin == "complete") {
         $output = new WebpageXML(true, null);
-        $output->run();
+        
+        if(isset($_GET['json'])){
+            $sxml = simplexml_load_string($output->getXMLString());
+            echo json_encode($sxml);
+        }
+        else {
+            $output->run();
+        }
     } elseif ($plugin != "") {
         $output = new WebpageXML(false, $plugin);
-        $output->run();
+        if(isset($_GET['json'])){
+            $sxml = simplexml_load_string($output->getXMLString());
+            echo json_encode($sxml);
+        }
+        else {
+            $output->run();
+        }
     }
 } else {
     $output = new WebpageXML(false, null);
-    $output->run();
+    
+    if(isset($_GET['json'])){
+        $sxml = simplexml_load_string($output->getXMLString());
+        echo json_encode($sxml);
+    }
+    else {
+        $output->run();
+    }
 }
 ?>

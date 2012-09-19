@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.PSI_Interface_Output.inc.php 214 2009-05-25 08:32:40Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**

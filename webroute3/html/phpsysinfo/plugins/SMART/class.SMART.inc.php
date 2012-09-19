@@ -9,10 +9,9 @@
  * @author    Antoine Bertin <diaoulael@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.SMART.inc.php 552 2012-03-25 08:27:55Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
-
 /**
  * SMART plugin, which displays all SMART informations available
  *
@@ -52,35 +51,63 @@ class SMART extends PSI_Plugin
     public function __construct($enc)
     {
         parent::__construct(__CLASS__, $enc);
-        switch (PSI_PLUGIN_SMART_ACCESS) {
+        switch (strtolower(PSI_PLUGIN_SMART_ACCESS)) {
             case 'command':
-                $disks = preg_split('/([\s]+)?,([\s]+)?/', PSI_PLUGIN_SMART_DEVICES, -1, PREG_SPLIT_NO_EMPTY);
-                foreach ($disks as $disk) {
-                    $buffer = "";
-                    if (CommonFunctions::executeProgram('smartctl', '--all'.((PSI_PLUGIN_SMART_DEVICE) ? ' --device '.PSI_PLUGIN_SMART_DEVICE : '').' '.$disk, $buffer, PSI_DEBUG)) {
-                        $this->_filecontent[$disk] = $buffer;
+                if ( defined('PSI_PLUGIN_SMART_DEVICES') && is_string(PSI_PLUGIN_SMART_DEVICES) ) {
+                    if (preg_match(ARRAY_EXP, PSI_PLUGIN_SMART_DEVICES)) {
+                        $disks = eval(PSI_PLUGIN_SMART_DEVICES);
+                    } else {
+                        $disks = array(PSI_PLUGIN_SMART_DEVICES);
+                    }
+                    foreach ($disks as $disk) {
+                        $buffer = "";
+                        if (CommonFunctions::executeProgram('smartctl', '--all'.((PSI_PLUGIN_SMART_DEVICE) ? ' --device '.PSI_PLUGIN_SMART_DEVICE : '').' '.$disk, $buffer, PSI_DEBUG)) {
+                            $this->_filecontent[$disk] = $buffer;
+                        }
                     }
                 }
-                $fullIds = preg_split('/([\s]+)?,([\s]+)?/', PSI_PLUGIN_SMART_IDS, -1, PREG_SPLIT_NO_EMPTY);
-                foreach ($fullIds as $fullId) {
-                    $arrFullId = preg_split('/-/', $fullId);
-                    $this->_ids[intval($arrFullId[0])] = strtolower($arrFullId[1]);
+                if ( defined('PSI_PLUGIN_SMART_IDS') && is_string(PSI_PLUGIN_SMART_IDS) ) {
+                    if (preg_match(ARRAY_EXP, PSI_PLUGIN_SMART_IDS)) {
+                        $fullIds = eval(PSI_PLUGIN_SMART_IDS);
+                    } else {
+                        $fullIds = array(PSI_PLUGIN_SMART_IDS);
+                    }
+                    foreach ($fullIds as $fullId) {
+                        $arrFullId = preg_split('/-/', $fullId);
+                        $this->_ids[intval($arrFullId[0])] = strtolower($arrFullId[1]);
+                        if (!empty($arrFullId[2]))
+                            $this->_ids[intval($arrFullId[2])] = "#replace-".intval($arrFullId[0]);
+                    }
                 }
                 break;
             case 'data':
-                $disks = preg_split('/([\s]+)?,([\s]+)?/', PSI_PLUGIN_SMART_DEVICES, -1, PREG_SPLIT_NO_EMPTY);
-                $dn=0;
-                foreach ($disks as $disk) {
-                    $buffer="";
-                    if ((CommonFunctions::rfts(APP_ROOT."/data/SMART{$dn}.txt", $buffer))&&(!empty($buffer))){
-                        $this->_filecontent[$disk] = $buffer;
+                if ( defined('PSI_PLUGIN_SMART_DEVICES') && is_string(PSI_PLUGIN_SMART_DEVICES) ) {
+                    if (preg_match(ARRAY_EXP, PSI_PLUGIN_SMART_DEVICES)) {
+                        $disks = eval(PSI_PLUGIN_SMART_DEVICES);
+                    } else {
+                        $disks = array(PSI_PLUGIN_SMART_DEVICES);
                     }
-                    $dn++;
+                    $dn=0;
+                    foreach ($disks as $disk) {
+                        $buffer="";
+                        if ((CommonFunctions::rfts(APP_ROOT."/data/smart{$dn}.txt", $buffer))&&(!empty($buffer))){
+                            $this->_filecontent[$disk] = $buffer;
+                        }
+                        $dn++;
+                    }
                 }
-                $fullIds = preg_split('/([\s]+)?,([\s]+)?/', PSI_PLUGIN_SMART_IDS, -1, PREG_SPLIT_NO_EMPTY);
-                foreach ($fullIds as $fullId) {
-                    $arrFullId = preg_split('/-/', $fullId);
-                    $this->_ids[intval($arrFullId[0])] = strtolower($arrFullId[1]);
+                if ( defined('PSI_PLUGIN_SMART_IDS') && is_string(PSI_PLUGIN_SMART_IDS) ) {
+                    if (preg_match(ARRAY_EXP, PSI_PLUGIN_SMART_IDS)) {
+                        $fullIds = eval(PSI_PLUGIN_SMART_IDS);
+                    } else {
+                        $fullIds = array(PSI_PLUGIN_SMART_IDS);
+                    }
+                    foreach ($fullIds as $fullId) {
+                        $arrFullId = preg_split('/-/', $fullId);
+                        $this->_ids[intval($arrFullId[0])] = strtolower($arrFullId[1]);
+                        if (!empty($arrFullId[2]))
+                            $this->_ids[intval($arrFullId[2])] = "#replace-".intval($arrFullId[0]);
+                    }
                 }
                 break;
             default:
@@ -133,6 +160,11 @@ class SMART extends PSI_Plugin
                     $j = 0;
                     $found = false;
                     foreach ($values as $value) {
+                        if ((in_array($value, array_keys($this->_ids)) && $labels[$j] == 'id')) {
+                          $arrFullVa = preg_split('/-/', $this->_ids[$value]);
+                          if (($arrFullVa[0]=="#replace")&&(!empty($arrFullVa[1])))
+                              $value=$arrFullVa[1];
+                        }
                         if (((in_array($value, array_keys($this->_ids)) && $labels[$j] == 'id') || ($found && (in_array($labels[$j], array_values($this->_ids)))) || ($found && $labels[$j] == 'attribute_name'))) {
                             $this->_result[$disk][$i][$labels[$j]] = $value;
                             $found = true;
@@ -199,9 +231,9 @@ class SMART extends PSI_Plugin
                         $found = 0;
                         foreach ($lineInfos as $label=>$value) {
                             if (($found==0)&&($label=="id")&&($value==$id))
-                            $found = 1;
+                                $found = 1;
                             if (($found==1)&&($label==$column_name))
-                            $found = 2;
+                                $found = 2;
                         }
                     }
                 }

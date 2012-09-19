@@ -1,6 +1,6 @@
 <?php 
 /**
- * QUOTAS Plugin
+ * Quotas Plugin
  *
  * PHP version 5
  *
@@ -9,11 +9,11 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.Quotas.inc.php 329 2009-09-07 11:21:44Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
- * quota Plugin, which displays all quotas on the machine
+ * Quotas Plugin, which displays all quotas on the machine
  * display all quotas in a sortable table with the current values which are determined by
  * calling the "repquota" command line utility, another way is to provide
  * a file with the output of the repquota utility, so there is no need to run a execute by the
@@ -50,7 +50,7 @@ class Quotas extends PSI_Plugin
     public function __construct($enc)
     {
         parent::__construct(__CLASS__, $enc);
-        switch (PSI_PLUGIN_QUOTAS_ACCESS) {
+        switch (strtolower(PSI_PLUGIN_QUOTAS_ACCESS)) {
         case 'command':
             CommonFunctions::executeProgram("repquota", "-au", $buffer, PSI_DEBUG);
             break;

@@ -1,4 +1,5 @@
 <?php
+//###--- version 3.2.0 ---####//
 function sql_to_redirector()
 {
     $db_host = 'localhost';
@@ -80,6 +81,10 @@ function sql_to_redirector()
     fwrite($file, "allow_urls ");
     fwrite($file, $quer7['value']);
     fwrite($file, "\n\n");
+
+    /////////////
+    //writing empty dir - only for lock files and system files
+    fwrite($file, "<lock_file>\nban_dir /etc/squid/banlist/lock_file\nurl http://127.0.0.1/ban/ban.php\nlog off\n\n");
 
     ////////////
     //writing user exeptions files

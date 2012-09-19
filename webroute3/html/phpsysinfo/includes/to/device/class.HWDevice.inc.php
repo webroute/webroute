@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.HWDevice.inc.php 255 2009-06-17 13:39:41Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**

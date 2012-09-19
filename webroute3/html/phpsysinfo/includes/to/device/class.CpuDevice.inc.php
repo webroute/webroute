@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.CpuDevice.inc.php 411 2010-12-28 22:32:52Z Jacky672 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**

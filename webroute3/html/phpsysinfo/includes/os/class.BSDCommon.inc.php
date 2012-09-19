@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.BSDCommon.inc.php 562 2012-04-04 07:28:27Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -215,10 +215,10 @@ abstract class BSDCommon extends OS
     protected function ip()
     {
         if (PSI_USE_VHOST === true) {
-            $this->sys->setIp(gethostbyname($this->hostname()));
+            $this->sys->setIp(gethostbyname($this->sys->getHostname()));
         } else {
             if (!($result = getenv('SERVER_ADDR'))) {
-                $this->sys->setIp(gethostbyname($this->hostname()));
+                $this->sys->setIp(gethostbyname($this->sys->getHostname()));
             } else {
                 $this->sys->setIp($result);
             }
@@ -289,13 +289,34 @@ abstract class BSDCommon extends OS
     {
         $dev = new CpuDevice();
         $dev->setModel($this->grabkey('hw.model'));
+        $notwas = true;
         foreach ($this->readdmesg() as $line) {
-            if (preg_match("/".$this->_CPURegExp1."/", $line, $ar_buf)) {
-                $dev->setCpuSpeed(round($ar_buf[2]));
-                break;
+            if ($notwas) {
+               if (preg_match("/".$this->_CPURegExp1."/", $line, $ar_buf)) {
+                    $dev->setCpuSpeed(round($ar_buf[2]));
+                    $notwas = false;
+                }
+            } else {
+                if (preg_match("/ Origin| Features/", $line, $ar_buf)) {
+                       if (preg_match("/ Features2[ ]*=.*<(.*)>/", $line, $ar_buf)){
+                           $feats = preg_split("/,/", strtolower(trim($ar_buf[1])), -1, PREG_SPLIT_NO_EMPTY);
+                           foreach ($feats as $feat) {
+                                if (($feat=="vmx")||($feat=="svm")) {
+                                   $dev->setVirt($feat);
+                                   break 2;
+                                }
+                           }
+                           break;
+                       }
+                } else break;
             }
         }
-        $this->sys->setCpus($dev);
+        $ncpu = $this->grabkey('hw.ncpu');
+        if ( is_null($ncpu) || (trim($ncpu) == "") || (!($ncpu >= 1)) )
+            $ncpu = 1;
+        for ($ncpu ; $ncpu > 0 ; $ncpu--) {
+            $this->sys->setCpus($dev);
+        }
     }
     
     /**

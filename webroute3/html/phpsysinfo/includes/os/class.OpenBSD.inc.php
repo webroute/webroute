@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.OpenBSD.inc.php 371 2010-05-16 08:35:28Z jacky672 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -111,7 +111,12 @@ class OpenBSD extends BSDCommon
         $dev = new CpuDevice();
         $dev->setModel($this->grabkey('hw.model'));
         $dev->setCpuSpeed($this->grabkey('hw.cpuspeed'));
-        $this->sys->setCpus($dev);
+        $ncpu = $this->grabkey('hw.ncpu');
+        if ( is_null($ncpu) || (trim($ncpu) == "") || (!($ncpu >= 1)) )
+            $ncpu = 1;
+        for ($ncpu ; $ncpu > 0 ; $ncpu--) {
+            $this->sys->setCpus($dev);
+        }
     }
     
     /**

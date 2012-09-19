@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.SunOS.inc.php 287 2009-06-26 12:11:59Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -31,7 +31,6 @@ class SunOS extends OS
      */
     public function __construct()
     {
-        $this->error->addError("WARN", "The SunOS version of phpSysInfo is work in progress, some things currently don't work");
     }
     
     /**
@@ -78,10 +77,10 @@ class SunOS extends OS
     private function _ip()
     {
         if (PSI_USE_VHOST === true) {
-            $this->sys->setIp(gethostbyname($this->_hostname()));
+            $this->sys->setIp(gethostbyname($this->sys->getHostname()));
         } else {
             if (!($result = getenv('SERVER_ADDR'))) {
-                $this->sys->setIp(gethostbyname($this->_hostname()));
+                $this->sys->setIp(gethostbyname($this->sys->getHostname()));
             } else {
                 $this->sys->setIp($result);
             }
@@ -265,8 +264,9 @@ class SunOS extends OS
      */
     function build()
     {
-        $this->_ip();
+        $this->error->addError("WARN", "The SunOS version of phpSysInfo is work in progress, some things currently don't work");
         $this->_hostname();
+        $this->_ip();
         $this->_distro();
         $this->_kernel();
         $this->_uptime();

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-####--- start by crontab every 2 minutes ---#####
-####--- version 3.1.0 ---####
+####--- start by cron every 2 minutes ---#####
+####--- version 3.2.1 ---####
 
 import sys
 from datetime import date, datetime
@@ -20,7 +20,9 @@ if now.hour == 23 and now.minute + 2 >= 60:
     today = str(date.today())
     ctrl.final_stat(today)
     base.backup()
-    if t.strftime('%m') == 06 and t.strftime('%d') == 30:
-        now = datetime.now()
-        lastyear = now.year - 1
-        base.archive(lastyear)
+    base.clean_db()
+    base.clean_netflow_trash()
+    
+#    if now.month == 6 and now.day == 30:
+#        lastyear = now.year - 1
+#        base.archive(lastyear)

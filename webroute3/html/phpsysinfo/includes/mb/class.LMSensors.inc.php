@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.LMSensors.inc.php 316 2009-09-03 08:09:18Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -96,7 +96,7 @@ class LMSensors extends Sensors
             } elseif (preg_match("/(.*):(.*).C[ ]*\((.*)=(.*).C\)(.*)/", $line, $data)) {
                 ;
             } else {
-                (preg_match("/(.*):(.*).C/", $line, $data));
+                (preg_match("/(.*):(.*).C[ \t]*$/", $line, $data));
             }
             foreach ($data as $key=>$value) {
                 if (preg_match("/^\+?([0-9\.]+).?$/", trim($value), $newvalue)) {
@@ -108,19 +108,11 @@ class LMSensors extends Sensors
             $dev = new SensorDevice();
             $dev->setName($data[1]);
             $dev->setValue($data[2]);
-            $limit = 0;
-            $perce = 0;
-            if (isset($data[6]) && $data[2] > $data[6]) {
-                $limit = 75;
-                $perce = 75;
-            } else {
-                $limit = isset($data[4]) ? $data[4] : 75;
-                $perce = isset($data[6]) ? $data[6] : 75;
-            }
-            if ($limit < $perce) {
-                $dev->setMax($perce);
-            } else {
-                $dev->setMax($limit);
+
+            if (isset($data[6]) && $data[2] <= $data[6]) {
+                  $dev->setMax(max($data[4],$data[6]));
+            } elseif (isset($data[4]) && $data[2] <= $data[4]) {
+                   $dev->setMax($data[4]);
             }
             $this->mbinfo->setMbTemp($dev);
         }
@@ -165,7 +157,7 @@ class LMSensors extends Sensors
             } elseif (preg_match("/(.*):(.*) RPM  \((.*)=(.*) RPM\)(.*)/", $line, $data)) {
                 ;
             } else {
-                preg_match("/(.*):(.*) RPM/", $line, $data);
+                preg_match("/(.*):(.*) RPM[ \t]*$/", $line, $data);
             }
             $dev = new SensorDevice();
             $dev->setName(trim($data[1]));
@@ -212,7 +204,7 @@ class LMSensors extends Sensors
             } elseif (preg_match("/(.*):(.*) V  \((.*)=(.*) V,(.*)=(.*) V\)(.*)/", $line, $data)) {
                 ;
             } else {
-                preg_match("/(.*):(.*) V$/", $line, $data);
+                preg_match("/(.*):(.*) V[ \t]*$/", $line, $data);
             }
             foreach ($data as $key=>$value) {
                 if (preg_match("/^\+?([0-9\.]+)$/", trim($value), $newvalue)) {

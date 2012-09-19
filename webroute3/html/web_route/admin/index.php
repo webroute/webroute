@@ -1,9 +1,9 @@
 <?php
+//###--- version 3.2.0 ---####//
 session_start();
 if ($_SESSION['role'] != 'admin')
 	{
 	@header('Location: /web_route');
-	//header("Status: 404 Not Found");
 	}
 ?>
 <html>
@@ -13,7 +13,9 @@ if ($_SESSION['role'] != 'admin')
 <link rel="shortcut icon"href="../img/icon.ico">
 <link href="/web_route/untitled.css" rel="stylesheet" type="text/css">
 <script src="/web_route/js/jquery.js" type="text/javascript"></script>
-<script type="text/javascript">
+
+
+    <script type="text/javascript">
 var timeout    = 500;
 var closetimer = 0;
 var ddmenuitem = 0;
@@ -48,6 +50,7 @@ $(document).ready(function()
    });
 
 document.onclick = jsddm_close;
+
 </script>
 </head>
 <body class="tmpl2">
@@ -65,8 +68,6 @@ document.onclick = jsddm_close;
 
 <!--- end of head--->
 </td></tr>
-
-
 <!--- menu --->
 <tr>
 <td width="100%">
@@ -80,12 +81,9 @@ document.onclick = jsddm_close;
 <?php 
 print <<<HTML
 <ul id="jsddm">
-    <li><a href="">Пользователи</a>
+    <li><a href="{$_SERVER['PHP_SELF']}?act=v_usr">Пользователи</a>
         <ul>
-            <li><a href="{$_SERVER['PHP_SELF']}?act=v_usr">Список пользователей</a></li>
-            <li><a href="{$_SERVER['PHP_SELF']}?act=new_usr">Добавить нового</a></li>
-            <li><a href="{$_SERVER['PHP_SELF']}?act=del_usr">Удалить пользователя</a></li>
-            <li><a href="{$_SERVER['PHP_SELF']}?act=ch_pass">Изменить пароль</a></li>
+            <li><a href="{$_SERVER['PHP_SELF']}?act=v_usr">Управление пользователями</a></li>
         </ul>
     </li>
 </ul>
@@ -184,12 +182,10 @@ HTML;
   <div class="block-round-content" style="background-color:#EDF3FE" align="center">
 
 <?php
-                     if(isset ($_GET['act'])){
-			if ($_GET['act'] == 'new_usr'){ include_once('../lib/new_usr.php');}
-			elseif($_GET['act'] == 'del_usr'){include_once('../lib/del_usr.php');}
+            if(isset ($_GET['act'])){
+			if($_GET['act'] == 'web_acc'){include_once('../lib/web_acc.php');}
 			elseif($_GET['act'] == 'ch_pass'){include_once('../lib/ch_pass.php');}
-			elseif($_GET['act'] == 'web_acc'){include_once('../lib/web_acc.php');}			
-			elseif($_GET['act'] == 'web_exept'){include_once('../lib/web_exept.php');}
+            elseif($_GET['act'] == 'web_exept'){include_once('../lib/web_exept.php');}
             elseif($_GET['act'] == 'usr_exept'){include_once('../lib/usr_exept.php');}
             elseif($_GET['act'] == 'usr_den'){include_once('../lib/usr_den.php');}
             elseif($_GET['act'] == 'abs_exept'){include_once('../lib/abs_exept.php');}
@@ -247,7 +243,6 @@ HTML;
 </td>
 <!--- end of main--->
 </tr>
-
 </table>
 </body>
 </html>

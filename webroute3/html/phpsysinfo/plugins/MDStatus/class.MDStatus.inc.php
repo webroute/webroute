@@ -1,6 +1,6 @@
 <?php 
 /**
- * MDSTAT Plugin
+ * MDStatus Plugin
  *
  * PHP version 5
  *
@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.MDStatus.inc.php 329 2009-09-07 11:21:44Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -51,7 +51,7 @@ class MDStatus extends PSI_Plugin
     {
         $buffer = "";
         parent::__construct(__CLASS__, $enc);
-        switch (PSI_PLUGIN_MDSTAT_ACCESS) {
+        switch (strtolower(PSI_PLUGIN_MDSTATUS_ACCESS)) {
         case 'file':
             CommonFunctions::rfts("/proc/mdstat", $buffer);
             break;
@@ -59,7 +59,7 @@ class MDStatus extends PSI_Plugin
             CommonFunctions::rfts(APP_ROOT."/data/mdstat.txt", $buffer);
             break;
         default:
-            $this->global_error->addConfigError("__construct()", "PSI_PLUGIN_MDSTAT_ACCESS");
+            $this->global_error->addConfigError("__construct()", "PSI_PLUGIN_MDSTATUS_ACCESS");
             break;
         }
         if (trim($buffer) != "") {

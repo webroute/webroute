@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Notifier Plugin
+ * UpdateNotifier Plugin
  *
  * PHP version 5
  *
@@ -9,18 +9,18 @@
  * @author    Damien ROTH <iysaak@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.UpdateNotifier.inc.php 525 2011-11-26 10:19:27Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
 /**
- * Update Notifier Plugin, which displays update notification from Ubuntu Landscape system
+ * UpdateNotifier Plugin, which displays update notification from Ubuntu Landscape system
  *
  * @category  PHP
  * @package   PSI_Plugin_UpdateNotifier
  * @author    Damien ROTH <iysaak@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   $Id: class.UpdateNotifier.inc.php 525 2011-11-26 10:19:27Z namiltd $
+ * @version   $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
 class UpdateNotifier extends PSI_Plugin
@@ -46,7 +46,7 @@ class UpdateNotifier extends PSI_Plugin
     {
         parent::__construct(__CLASS__, $enc);
         
-        CommonFunctions::rfts(PSI_PLUGIN_UPDATE_NOTIFIER_FILE, $buffer_info);
+        CommonFunctions::rfts(PSI_PLUGIN_UPDATENOTIFIER_FILE, $buffer_info);
         // Remove blank lines
         $this->_filecontent = preg_split("/\n/", $buffer_info, -1, PREG_SPLIT_NO_EMPTY);
     }
@@ -63,7 +63,7 @@ class UpdateNotifier extends PSI_Plugin
             return;
         }
         
-        if (PSI_PLUGIN_UPDATE_NOTIFIER_UBUNTU_LANDSCAPE_FORMAT === true) {
+        if (PSI_PLUGIN_UPDATENOTIFIER_UBUNTU_LANDSCAPE_FORMAT === true) {
             /*
              Ubuntu Landscape format:
              - line 1: packages to update

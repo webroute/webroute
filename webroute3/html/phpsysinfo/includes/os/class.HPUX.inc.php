@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.HPUX.inc.php 287 2009-06-26 12:11:59Z bigmichi1 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -50,10 +50,10 @@ class HPUX extends OS
     private function _ip()
     {
         if (PSI_USE_VHOST === true) {
-            $this->sys->setIp(gethostbyname($this->_hostname()));
+            $this->sys->setIp(gethostbyname($this->sys->getHostname()));
         } else {
             if (!($result = getenv('SERVER_ADDR'))) {
-                $this->sys->setIp(gethostbyname($this->_hostname()));
+                $this->sys->setIp(gethostbyname($this->sys->getHostname()));
             } else {
                 $this->sys->setIp($result);
             }
@@ -373,6 +373,7 @@ class HPUX extends OS
     private function _distro()
     {
         $this->sys->setDistribution('HP-UX');
+        $this->sys->setDistributionIcon('HPUX.png');
     }
 
     
@@ -386,8 +387,8 @@ class HPUX extends OS
     function build()
     {
         $this->_distro();
-        $this->_ip();
         $this->_hostname();
+        $this->_ip();
         $this->_kernel();
         $this->_uptime();
         $this->_users();

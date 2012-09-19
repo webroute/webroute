@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.WebpageXSLT.inc.php 569 2012-04-16 06:08:18Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -40,7 +40,6 @@ class WebpageXSLT extends WebpageXML implements PSI_Interface_Output
      */
     public function run()
     {
-        CommonFunctions::checkForSVN();
         CommonFunctions::checkForExtensions(array('xsl'));
         $xmlfile = $this->getXMLString();
         $xslfile = "phpsysinfo.xslt";

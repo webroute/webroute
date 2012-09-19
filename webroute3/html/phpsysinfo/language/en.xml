@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Id: en.xml 440 2011-02-19 16:56:29Z jacky672 $ -->
+<!-- $Id$ -->
 <!--
 phpSysInfo language file Language: English Created by: Audun Larsen
 -->
@@ -290,5 +290,14 @@ phpSysInfo language file Language: English Created by: Audun Larsen
   </expression>
   <expression id="095" name="lastboot">
     <exp>Last boot</exp>
+  </expression>
+  <expression id="096" name="bytes">
+    <exp>B</exp>
+  </expression>
+  <expression id="097" name="language">
+    <exp>System Language</exp>
+  </expression>
+  <expression id="098" name="charmap">
+    <exp>Charmap</exp>
   </expression>
 </tns:translation>

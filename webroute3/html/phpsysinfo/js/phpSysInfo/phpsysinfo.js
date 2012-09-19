@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 //
-// $Id: phpsysinfo.js 547 2012-03-22 09:44:38Z namiltd $
+// $Id$
 //
 
 /*global $, jQuery */
@@ -405,46 +405,50 @@ function formatBytes(bytes, xml) {
         byteFormat = $(this).attr("byteFormat");
     });
     
-    switch (byteFormat) {
-    case "PiB":
+    switch (byteFormat.toLowerCase()) {
+    case "pib":
         show += round(bytes / Math.pow(1024, 5), 2);
         show += "&nbsp;" + genlang(90, true);
         break;
-    case "TiB":
+    case "tib":
         show += round(bytes / Math.pow(1024, 4), 2);
         show += "&nbsp;" + genlang(86, true);
         break;
-    case "GiB":
+    case "gib":
         show += round(bytes / Math.pow(1024, 3), 2);
         show += "&nbsp;" + genlang(87, true);
         break;
-    case "MiB":
+    case "mib":
         show += round(bytes / Math.pow(1024, 2), 2);
         show += "&nbsp;" + genlang(88, true);
         break;
-    case "KiB":
+    case "kib":
         show += round(bytes / Math.pow(1024, 1), 2);
         show += "&nbsp;" + genlang(89, true);
         break;
-    case "PB":
+    case "pb":
         show += round(bytes / Math.pow(1000, 5), 2);
         show += "&nbsp;" + genlang(91, true);
         break;
-    case "TB":
+    case "tb":
         show += round(bytes / Math.pow(1000, 4), 2);
         show += "&nbsp;" + genlang(85, true);
         break;
-    case "GB":
+    case "gb":
         show += round(bytes / Math.pow(1000, 3), 2);
         show += "&nbsp;" + genlang(41, true);
         break;
-    case "MB":
+    case "mb":
         show += round(bytes / Math.pow(1000, 2), 2);
         show += "&nbsp;" + genlang(40, true);
         break;
-    case "KB":
+    case "kb":
         show += round(bytes / Math.pow(1000, 1), 2);
         show += "&nbsp;" + genlang(39, true);
+        break;
+    case "b":
+        show += bytes;
+        show += "&nbsp;" + genlang(96, true);
         break;
     case "auto_decimal":
         if (bytes > Math.pow(1000, 5)) {
@@ -467,8 +471,14 @@ function formatBytes(bytes, xml) {
                         show += "&nbsp;" + genlang(40, true);
                     }
                     else {
-                        show += round(bytes / Math.pow(1000, 1), 2);
-                        show += "&nbsp;" + genlang(39, true);
+                        if (bytes > Math.pow(1000, 1)) {
+                            show += round(bytes / Math.pow(1000, 1), 2);
+                            show += "&nbsp;" + genlang(39, true);
+                        }
+                        else {
+                                show += bytes;
+                                show += "&nbsp;" + genlang(96, true);
+                        }
                     }
                 }
             }
@@ -495,8 +505,14 @@ function formatBytes(bytes, xml) {
                         show += "&nbsp;" + genlang(88, true);
                     }
                     else {
-                        show += round(bytes / Math.pow(1024, 1), 2);
-                        show += "&nbsp;" + genlang(89, true);
+                        if (bytes > Math.pow(1024, 1)) {
+                            show += round(bytes / Math.pow(1024, 1), 2);
+                            show += "&nbsp;" + genlang(89, true);
+                        }
+                        else {
+                            show += bytes;
+                            show += "&nbsp;" + genlang(96, true);
+                        }
                     }
                 }
             }
@@ -551,8 +567,9 @@ function createBar(size) {
  */
 function refreshVitals(xml) {
     var hostname = "", ip = "", kernel = "", distro = "", icon = "", uptime = "", users = 0, loadavg = "";
+    var language = "", charmap = "";
     var lastboot = 0, timestamp = Number(new Date());
-    
+
     $("Vitals", xml).each(function getVitals(id) {
         hostname = $(this).attr("Hostname");
         ip = $(this).attr("IPAddr");
@@ -566,6 +583,18 @@ function refreshVitals(xml) {
         if ($(this).attr("CPULoad") !== undefined) {
             loadavg = loadavg + "<br/>" + createBar(parseInt($(this).attr("CPULoad"), 10));
         }
+        if ($(this).attr("Language") !== undefined) {
+            language = $(this).attr("Language");
+            document.getElementById("s_language_tr").style.display='';
+        }
+        if ($(this).attr("Charmap") !== undefined) {
+            charmap = $(this).attr("Charmap");
+            if ($(this).attr("Language") !== undefined) {
+                document.getElementById("s_charmap_tr1").style.display='';
+            } else {
+                document.getElementById("s_charmap_tr2").style.display='';
+            }
+        }
         document.title = "System information: " + hostname + " (" + ip + ")";
         $("#s_hostname_title").html(hostname);
         $("#s_ip_title").html(ip);
@@ -577,6 +606,9 @@ function refreshVitals(xml) {
         $("#s_lastboot").html(lastboot.toGMTString()); //toGMTString() or toLocaleString()
         $("#s_users").html(users);
         $("#s_loadavg").html(loadavg);
+        $("#s_language").html(language);
+        $("#s_charmap_1").html(charmap);
+        $("#s_charmap_2").html(charmap);
     });
 }
 
@@ -955,11 +987,13 @@ function refreshTemp(xml) {
     var values = false;
     $("#tempTable tbody").empty();
     $("MBInfo Temperature Item", xml).each(function getTemperatures(id) {
-        var label = "", value = "", limit = "";
+        var label = "", value = "", limit = 0, _limit = "";
         label = $(this).attr("Label");
         value = $(this).attr("Value").replace(/\+/g, "");
-        limit = $(this).attr("Max").replace(/\+/g, "");
-        $("#tempTable").append("<tr><td>" + label + "</td><td class=\"right\">" + formatTemp(value, xml) + "</td><td class=\"right\">" + formatTemp(limit, xml) + "</td></tr>");
+        limit = parseFloat($(this).attr("Max").replace(/\+/g, ""));
+        if (isFinite(limit))
+            _limit = formatTemp(limit, xml);
+        $("#tempTable").append("<tr><td>" + label + "</td><td class=\"right\">" + formatTemp(value, xml) + "</td><td class=\"right\">" + _limit + "</td></tr>");
         values = true;
     });
     if (values) {
@@ -980,12 +1014,16 @@ function refreshVoltage(xml) {
     var values = false;
     $("#voltageTable tbody").empty();
     $("MBInfo Voltage Item", xml).each(function getVoltages(id) {
-        var label = "", value = 0, max = 0, min = 0;
+        var label = "", value = 0, max = 0, min = 0, _min = "", _max = "";
         label = $(this).attr("Label");
-        value = parseFloat($(this).attr("Value"), 10);
-        max = parseFloat($(this).attr("Max"), 10);
-        min = parseFloat($(this).attr("Min"), 10);
-        $("#voltageTable tbody").append("<tr><td>" + label + "</td><td class=\"right\">" + round(value, 2) + "&nbsp;" + genlang(62, true) + "</td><td class=\"right\">" + round(min, 2) + "&nbsp;" + genlang(62, true) + "</td><td class=\"right\">" + round(max, 2) + "&nbsp;" + genlang(62, true) + "</td></tr>");
+        value = parseFloat($(this).attr("Value"));
+        max = parseFloat($(this).attr("Max"));
+        if (isFinite(max))
+            _max = round(max, 2) + "&nbsp;" + genlang(62, true);
+        min = parseFloat($(this).attr("Min"));
+        if (isFinite(min))
+            _min = round(min, 2) + "&nbsp;" + genlang(62, true);
+        $("#voltageTable tbody").append("<tr><td>" + label + "</td><td class=\"right\">" + round(value, 2) + "&nbsp;" + genlang(62, true) + "</td><td class=\"right\">" + _min + "</td><td class=\"right\">" + _max + "</td></tr>");
         values = true;
     });
     if (values) {
@@ -1006,11 +1044,13 @@ function refreshFan(xml) {
     var values = false;
     $("#fanTable tbody").empty();
     $("MBInfo Fans Item", xml).each(function getFans(id) {
-        var label = "", value = "", min = "";
+        var label = "", value = "", min = 0, _min = "";
         label = $(this).attr("Label");
         value = $(this).attr("Value");
-        min = $(this).attr("Min");
-        $("#fanTable tbody").append("<tr><td>" + label + "</td><td class=\"right\">" + value + "&nbsp;" + genlang(63, true) + "</td><td class=\"right\">" + min + "&nbsp;" + genlang(63, true) + "</td></tr>");
+        min = parseFloat($(this).attr("Min"));
+        if (isFinite(min))
+            _min = round(min,0) + "&nbsp;" + genlang(63, true);
+        $("#fanTable tbody").append("<tr><td>" + label + "</td><td class=\"right\">" + value + "&nbsp;" + genlang(63, true) + "</td><td class=\"right\">" + _min + "</td></tr>");
         values = true;
     });
     if (values) {
@@ -1029,7 +1069,7 @@ function refreshFan(xml) {
  */
 function refreshUps(xml) {
     var html = "", tree = [], closed = [], index = 0, values = false;
-    html += "<h2><span id=\"lang_068\">UPS information</span></h2>\n";
+    html += "<h2>" + genlang(68, false) + "</h2>\n";
     html += "        <table class=\"tablemain\" id=\"UPSTree\">\n";
     html += "          <tbody class=\"tree\">\n";
     

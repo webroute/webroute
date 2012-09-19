@@ -1,4 +1,5 @@
 <?php
+//###--- version 3.2.0 ---####//
 session_start();
 if ($_SESSION['role'] != 'statistic')
 	{

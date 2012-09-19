@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.Output.inc.php 569 2012-04-16 06:08:18Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -37,10 +37,11 @@ abstract class Output
      */
     public function __construct()
     {
-        CommonFunctions::checkForSVN();
-        CommonFunctions::checkForExtensions();
         $this->error = Error::singleton();
         $this->_checkConfig();
+        CommonFunctions::checkForExtensions();
+//        $this->error = Error::singleton();
+//        $this->_checkConfig();
     }
     
     /**

@@ -54,13 +54,13 @@ class AIX extends OS
     {
         if (PSI_USE_VHOST === true)
         {
-            $this->sys->setIp(gethostbyname($this->_hostname()));
+            $this->sys->setIp(gethostbyname($this->sys->getHostname()));
         }
         else
         {
             if (!($result = getenv('SERVER_ADDR')))
             {
-                $this->sys->setIp(gethostbyname($this->_hostname()));
+                $this->sys->setIp(gethostbyname($this->sys->getHostname()));
             }
             else
             {
@@ -333,7 +333,7 @@ class AIX extends OS
      */
     private function _distro()
     {
-        $this->sys->setDistribution(' IBM AIX ');
+        $this->sys->setDistribution('IBM AIX');
         $this->sys->setDistributionIcon('AIX.png');
     }
 
@@ -362,8 +362,8 @@ class AIX extends OS
     {
         $this->_myaixdata();
         $this->_distro();
-        $this->_ip();
         $this->_hostname();
+        $this->_ip();
         $this->_kernel();
         $this->_uptime();
         $this->_users();

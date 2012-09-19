@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.Parser.inc.php 521 2011-11-06 17:29:25Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -36,7 +36,11 @@ class Parser
         if (CommonFunctions::executeProgram("lspci", "", $strBuf, PSI_DEBUG)) {
             $arrLines = preg_split("/\n/", $strBuf, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($arrLines as $strLine) {
-                list($strAddr, $strName) = preg_split('/ /', trim($strLine), 2);
+                $arrParams = preg_split('/ /', trim($strLine), 2);
+                if (count($arrParams) == 2)
+                   $strName = $arrParams[1];
+                else
+                   $strName = "unknown";
                 $strName = preg_replace('/\(.*\)/', '', $strName);
                 $dev = new HWDevice();
                 $dev->setName($strName);
@@ -106,6 +110,9 @@ class Parser
                     if (preg_match("/\S+ on (\S+) type (.*) \((.*)\)/", $mount_line, $mount_buf)) {
                         $mount_parm[$mount_buf[1]]['fstype'] = $mount_buf[2];
                         if (PSI_SHOW_MOUNT_OPTION) $mount_parm[$mount_buf[1]]['options'] = $mount_buf[3];
+                    } elseif (preg_match("/\S+ is (.*) mounted on (\S+) \(type (.*)\)/", $mount_line, $mount_buf)) {
+                        $mount_parm[$mount_buf[2]]['fstype'] = $mount_buf[3];
+                        if (PSI_SHOW_MOUNT_OPTION) $mount_parm[$mount_buf[2]]['options'] = $mount_buf[1];
                     } elseif (preg_match("/\S+ (.*) on (\S+) \((.*)\)/", $mount_line, $mount_buf)) {
                         $mount_parm[$mount_buf[2]]['fstype'] = $mount_buf[1];
                         if (PSI_SHOW_MOUNT_OPTION) $mount_parm[$mount_buf[2]]['options'] = $mount_buf[3];

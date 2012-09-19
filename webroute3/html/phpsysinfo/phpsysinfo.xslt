@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--  $Id: phpsysinfo.xslt 518 2011-10-28 08:09:07Z namiltd $ -->
+    <!--  $Id$ -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:xdt="http://www.w3.org/2005/xpath-datatypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -189,6 +189,34 @@
                                                     </xsl:if>
                                                 </td>
                                             </tr>
+                                            <xsl:if
+                                                test="count(@Language )&gt;0">
+                                                <tr class="odd">
+                                                    <td style="width:160px;">
+                                                        <span>
+                                                            <xsl:text>System Language</xsl:text>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <xsl:value-of
+                                                            select="@Language" />
+                                                    </td>
+                                                </tr>
+                                            </xsl:if>
+                                            <xsl:if
+                                                test="count(@Charmap )&gt;0">
+                                                <tr class="odd">
+                                                    <td style="width:160px;">
+                                                        <span>
+                                                            <xsl:text>Charmap</xsl:text>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <xsl:value-of
+                                                            select="@Charmap" />
+                                                    </td>
+                                                </tr>
+                                            </xsl:if>
                                         </tbody>
                                     </table>
                                 </xsl:for-each>
@@ -207,7 +235,7 @@
                                                 <tr class="odd">
                                                     <td style="width:160px;">
                                                         <span>
-                                                            <xsl:text>Processor</xsl:text>
+                                                            <xsl:text>Processors</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td>
@@ -217,87 +245,102 @@
                                                 </tr>
                                                 <xsl:for-each
                                                     select="CpuCore">
-                                                    <tr class="odd">
-                                                        <td
-                                                            style="width:160px;">
-                                                            <span>
-                                                                <xsl:text>Model</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <xsl:value-of
-                                                                select="@Model" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td
-                                                            style="width:160px;">
-                                                            <span>
-                                                                <xsl:text>CPU Speed</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <xsl:if
-                                                                test="count(@CpuSpeed )&gt;0">
-                                                                <xsl:value-of
-                                                                    select="@CpuSpeed" />
+                                                    <xsl:if
+                                                        test="count(@Model )&gt;0">
+                                                        <tr class="odd">
+                                                            <td
+                                                                style="width:160px;">
                                                                 <span>
-                                                                    <xsl:text> Mhz</xsl:text>
+                                                                    <xsl:text>Model</xsl:text>
                                                                 </span>
-                                                            </xsl:if>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td
-                                                            style="width:160px;">
-                                                            <span>
-                                                                <xsl:text>Bus Speed</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <xsl:if
-                                                                test="count(@BusSpeed )&gt;0">
+                                                            </td>
+                                                            <td>
                                                                 <xsl:value-of
-                                                                    select="@BusSpeed" />
+                                                                    select="@Model" />
+                                                            </td>
+                                                        </tr>
+                                                    </xsl:if>
+                                                    <xsl:if
+                                                        test="count(@CpuSpeed )&gt;0">
+                                                        <tr>
+                                                            <td
+                                                                style="width:160px;">
                                                                 <span>
-                                                                    <xsl:text> Mhz</xsl:text>
+                                                                    <xsl:text>CPU Speed</xsl:text>
                                                                 </span>
-                                                            </xsl:if>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td
-                                                            style="width:160px;">
-                                                            <span>
-                                                                <xsl:text>Cache Size</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <xsl:if
-                                                                test="count(@Cache )&gt;0">
-                                                                <xsl:value-of
-                                                                    select="@Cache" />
+                                                            </td>
+                                                            <td>
+                                                                <xsl:if
+                                                                    test="count(@CpuSpeed )&gt;0">
+                                                                    <xsl:value-of
+                                                                        select="@CpuSpeed" />
+                                                                    <span>
+                                                                        <xsl:text> MHz</xsl:text>
+                                                                    </span>
+                                                                </xsl:if>
+                                                            </td>
+                                                        </tr>
+                                                    </xsl:if>
+                                                    <xsl:if
+                                                        test="count(@BusSpeed )&gt;0">
+                                                        <tr class="odd">
+                                                            <td
+                                                                style="width:160px;">
                                                                 <span>
-                                                                    <xsl:text> KB</xsl:text>
+                                                                    <xsl:text>Bus Speed</xsl:text>
                                                                 </span>
-                                                            </xsl:if>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td
-                                                            style="width:160px;">
-                                                            <span>
-                                                                <xsl:text>System Bogomips</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <xsl:if
-                                                                test="count(@Bogomips ) &gt;0">
-                                                                <xsl:value-of
-                                                                    select="@Bogomips" />
-                                                            </xsl:if>
-                                                        </td>
-                                                    </tr>
+                                                            </td>
+                                                            <td>
+                                                                <xsl:if
+                                                                    test="count(@BusSpeed )&gt;0">
+                                                                    <xsl:value-of
+                                                                        select="@BusSpeed" />
+                                                                    <span>
+                                                                        <xsl:text> MHz</xsl:text>
+                                                                    </span>
+                                                                </xsl:if>
+                                                            </td>
+                                                        </tr>
+                                                    </xsl:if>
+                                                    <xsl:if
+                                                        test="count(@Cache )&gt;0">
+                                                        <tr>
+                                                            <td
+                                                                style="width:160px;">
+                                                                <span>
+                                                                    <xsl:text>Cache Size</xsl:text>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <xsl:if
+                                                                    test="count(@Cache )&gt;0">
+                                                                    <xsl:value-of
+                                                                        select="round(@Cache div 1024)" />
+                                                                    <span>
+                                                                        <xsl:text> KiB</xsl:text>
+                                                                    </span>
+                                                                </xsl:if>
+                                                            </td>
+                                                        </tr>
+                                                    </xsl:if>
+                                                    <xsl:if
+                                                        test="count(@Bogomips )&gt;0">
+                                                        <tr class="odd">
+                                                            <td
+                                                                style="width:160px;">
+                                                                <span>
+                                                                    <xsl:text>System Bogomips</xsl:text>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <xsl:if
+                                                                    test="count(@Bogomips ) &gt;0">
+                                                                    <xsl:value-of
+                                                                        select="@Bogomips" />
+                                                                </xsl:if>
+                                                            </td>
+                                                        </tr>
+                                                    </xsl:if>
                                                 </xsl:for-each>
                                             </tbody>
                                         </table>
@@ -354,9 +397,9 @@
                                                                         <span>
                                                                             <xsl:text> (</xsl:text>
                                                                         </span>
-                                                                        <xsl:value-of select="@Capacity" />
+                                                                        <xsl:value-of select="round(@Capacity div 1024)" />
                                                                         <span>
-                                                                            <xsl:text> KB)</xsl:text>
+                                                                            <xsl:text> KiB)</xsl:text>
                                                                         </span>
                                                                     </xsl:if>
                                                                 </li>
@@ -392,9 +435,9 @@
                                                                         <span>
                                                                             <xsl:text> (</xsl:text>
                                                                         </span>
-                                                                        <xsl:value-of select="@Capacity" />
+                                                                        <xsl:value-of select="round(@Capacity div 1024)" />
                                                                         <span>
-                                                                            <xsl:text> KB)</xsl:text>
+                                                                            <xsl:text> KiB)</xsl:text>
                                                                         </span>
                                                                     </xsl:if>
                                                                 </li>
@@ -504,25 +547,25 @@
                                                 <td style="width:100px;"
                                                     class="right">
                                                     <xsl:value-of
-                                                        select="@Free" />
+                                                        select="round(@Free div 1024)" />
                                                     <span>
-                                                        <xsl:text> KB</xsl:text>
+                                                        <xsl:text> KiB</xsl:text>
                                                     </span>
                                                 </td>
                                                 <td style="width:100px;"
                                                     class="right">
                                                     <xsl:value-of
-                                                        select="@Used" />
+                                                        select="round(@Used div 1024)" />
                                                     <span>
-                                                        <xsl:text> KB</xsl:text>
+                                                        <xsl:text> KiB</xsl:text>
                                                     </span>
                                                 </td>
                                                 <td style="width:100px;"
                                                     class="right">
                                                     <xsl:value-of
-                                                        select="@Total" />
+                                                        select="round(@Total div 1024)" />
                                                     <span>
-                                                        <xsl:text> KB</xsl:text>
+                                                        <xsl:text> KiB</xsl:text>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -530,138 +573,147 @@
                                                 select="Details">
                                                 <xsl:if
                                                     test="count(@* )&gt;0">
-                                                    <tr>
-                                                        <td
-                                                            style="width:200px;">
-                                                            <span>
-                                                                <xsl:text>- Kernel + applications</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td
-                                                            style="width:285px;">
-                                                            <div
-                                                                style="float:left; width:{concat(  @AppPercent  , &apos;px&apos; )}; "
-                                                                class="bar">
+                                                    <xsl:if
+                                                        test="count(@App )&gt;0">
+                                                        <tr>
+                                                            <td
+                                                                style="width:200px;">
                                                                 <span>
-                                                                    <xsl:text>&#160;</xsl:text>
+                                                                    <xsl:text>- Kernel + applications</xsl:text>
                                                                 </span>
-                                                            </div>
-                                                            <div
-                                                                style="float:left; ">
-                                                                <span>
-                                                                    <xsl:text>&#160;</xsl:text>
-                                                                </span>
+                                                            </td>
+                                                            <td
+                                                                style="width:285px;">
+                                                                <div
+                                                                    style="float:left; width:{concat(  @AppPercent  , &apos;px&apos; )}; "
+                                                                    class="bar">
+                                                                    <span>
+                                                                        <xsl:text>&#160;</xsl:text>
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    style="float:left; ">
+                                                                    <span>
+                                                                        <xsl:text>&#160;</xsl:text>
+                                                                    </span>
+                                                                    <xsl:value-of
+                                                                        select="@AppPercent" />
+                                                                    <span>
+                                                                        <xsl:text>%</xsl:text>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right" />
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right">
                                                                 <xsl:value-of
-                                                                    select="@AppPercent" />
+                                                                    select="round(@App div 1024)" />
                                                                 <span>
-                                                                    <xsl:text>%</xsl:text>
+                                                                    <xsl:text> KiB</xsl:text>
                                                                 </span>
-                                                            </div>
-                                                        </td>
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right" />
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right">
-                                                            <xsl:value-of
-                                                                select="@App" />
-                                                            <span>
-                                                                <xsl:text> KB</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right" />
-                                                    </tr>
-                                                    <tr>
-                                                        <td
-                                                            style="width:200px;">
-                                                            <span>
-                                                                <xsl:text>- Buffers</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td
-                                                            style="width:285px;">
-                                                            <div
-                                                                style="float:left; width:{concat(  @BuffersPercent  , &apos;px&apos; )}; "
-                                                                class="bar">
+                                                            </td>
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right" />
+                                                        </tr>
+                                                    </xsl:if>
+                                                    <xsl:if
+                                                        test="count(@Buffers )&gt;0">
+                                                        <tr>
+                                                            <td
+                                                                style="width:200px;">
                                                                 <span>
-                                                                    <xsl:text>&#160;</xsl:text>
+                                                                    <xsl:text>- Buffers</xsl:text>
                                                                 </span>
-                                                            </div>
-                                                            <div
-                                                                style="float:left; ">
-                                                                <span>
-                                                                    <xsl:text>&#160;</xsl:text>
-                                                                </span>
+                                                            </td>
+                                                            <td
+                                                                style="width:285px;">
+                                                                <div
+                                                                    style="float:left; width:{concat(  @BuffersPercent  , &apos;px&apos; )}; "
+                                                                    class="bar">
+                                                                    <span>
+                                                                        <xsl:text>&#160;</xsl:text>
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    style="float:left; ">
+                                                                    <span>
+                                                                        <xsl:text>&#160;</xsl:text>
+                                                                    </span>
+                                                                    <xsl:value-of
+                                                                        select="@BuffersPercent" />
+                                                                    <span>
+                                                                        <xsl:text>%</xsl:text>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right" />
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right">
                                                                 <xsl:value-of
-                                                                    select="@BuffersPercent" />
+                                                                    select="round(@Buffers div 1024)" />
                                                                 <span>
-                                                                    <xsl:text>%</xsl:text>
+                                                                    <xsl:text> KiB</xsl:text>
                                                                 </span>
-                                                            </div>
-                                                        </td>
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right" />
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right">
-                                                            <xsl:value-of
-                                                                select="@Buffers" />
-                                                            <span>
-                                                                <xsl:text> KB</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right" />
-                                                    </tr>
-                                                    <tr>
-                                                        <td
-                                                            style="width:200px;">
-                                                            <span>
-                                                                <xsl:text>- Cached</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td
-                                                            style="width:285px;">
-                                                            <div
-                                                                style="float:left; width:{concat(  @CachedPercent  , &apos;px&apos; )}; "
-                                                                class="bar">
+                                                            </td>
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right" />
+                                                        </tr>
+                                                    </xsl:if>
+                                                    <xsl:if
+                                                        test="count(@Cached )&gt;0">
+                                                        <tr>
+                                                            <td
+                                                                style="width:200px;">
                                                                 <span>
-                                                                    <xsl:text>&#160;</xsl:text>
+                                                                    <xsl:text>- Cached</xsl:text>
                                                                 </span>
-                                                            </div>
-                                                            <div
-                                                                style="float:left; ">
-                                                                <span>
-                                                                    <xsl:text>&#160;</xsl:text>
-                                                                </span>
+                                                            </td>
+                                                            <td
+                                                                style="width:285px;">
+                                                                <div
+                                                                    style="float:left; width:{concat(  @CachedPercent  , &apos;px&apos; )}; "
+                                                                    class="bar">
+                                                                    <span>
+                                                                        <xsl:text>&#160;</xsl:text>
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    style="float:left; ">
+                                                                    <span>
+                                                                        <xsl:text>&#160;</xsl:text>
+                                                                    </span>
+                                                                    <xsl:value-of
+                                                                        select="@CachedPercent" />
+                                                                    <span>
+                                                                        <xsl:text>%</xsl:text>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right" />
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right">
                                                                 <xsl:value-of
-                                                                    select="@CachedPercent" />
+                                                                    select="round(@Cached div 1024)" />
                                                                 <span>
-                                                                    <xsl:text>%</xsl:text>
+                                                                    <xsl:text> KiB</xsl:text>
                                                                 </span>
-                                                            </div>
-                                                        </td>
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right" />
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right">
-                                                            <xsl:value-of
-                                                                select="@Cached" />
-                                                            <span>
-                                                                <xsl:text> KB</xsl:text>
-                                                            </span>
-                                                        </td>
-                                                        <td
-                                                            style="width:100px;"
-                                                            class="right" />
-                                                    </tr>
+                                                            </td>
+                                                            <td
+                                                                style="width:100px;"
+                                                                class="right" />
+                                                        </tr>
+                                                    </xsl:if>
                                                 </xsl:if>
                                             </xsl:for-each>
                                         </tbody>
@@ -700,25 +752,25 @@
                                                     <td style="width:100px;"
                                                         class="right">
                                                         <xsl:value-of
-                                                            select="@Free" />
+                                                            select="round(@Free div 1024)" />
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td style="width:100px;"
                                                         class="right">
                                                         <xsl:value-of
-                                                            select="@Used" />
+                                                            select="round(@Used div 1024)" />
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td style="width:100px;"
                                                         class="right">
                                                         <xsl:value-of
-                                                            select="@Total" />
+                                                            select="round(@Total div 1024)" />
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -758,27 +810,27 @@
                                                             style="width:100px;"
                                                             class="right">
                                                             <xsl:value-of
-                                                                select="@Free" />
+                                                                select="round(@Free div 1024)" />
                                                             <span>
-                                                                <xsl:text> KB</xsl:text>
+                                                                <xsl:text> KiB</xsl:text>
                                                             </span>
                                                         </td>
                                                         <td
                                                             style="width:100px;"
                                                             class="right">
                                                             <xsl:value-of
-                                                                select="@Used" />
+                                                                select="round(@Used div 1024)" />
                                                             <span>
-                                                                <xsl:text> KB</xsl:text>
+                                                                <xsl:text> KiB</xsl:text>
                                                             </span>
                                                         </td>
                                                         <td
                                                             style="width:100px;"
                                                             class="right">
                                                             <xsl:value-of
-                                                                select="@Total" />
+                                                                select="round(@Total div 1024)" />
                                                             <span>
-                                                                <xsl:text> KB</xsl:text>
+                                                                <xsl:text> KiB</xsl:text>
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -854,10 +906,8 @@
                                                             select="@FSType" />
                                                     </td>
                                                     <td style="width:120px;">
-                                                        <xsl:for-each
-                                                            select="Device">
-                                                            <xsl:apply-templates />
-                                                        </xsl:for-each>
+                                                        <xsl:value-of
+                                                            select="@Name" />
                                                     </td>
                                                     <td style="width:285px;">
                                                         <div
@@ -894,21 +944,21 @@
                                                         </div>
                                                     </td>
                                                     <td style="width:100px;" class="right">
-                                                        <xsl:value-of select="@Free" />
+                                                        <xsl:value-of select="round(@Free div 1024)" />
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td style="width:100px;" class="right">
-                                                        <xsl:value-of select="@Used" />
+                                                        <xsl:value-of select="round(@Used div 1024)" />
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td style="width:100px;" class="right">
-                                                        <xsl:value-of select="@Total" />
+                                                        <xsl:value-of select="round(@Total div 1024)" />
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -961,7 +1011,7 @@
                                                             <xsl:value-of select="round(@RxBytes div 1024)"/>
                                                         </span>
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td class="right" width="60px">
@@ -972,7 +1022,7 @@
                                                             <xsl:value-of select="round(@TxBytes div 1024)"/>
                                                         </span>
                                                         <span>
-                                                            <xsl:text> KB</xsl:text>
+                                                            <xsl:text> KiB</xsl:text>
                                                         </span>
                                                     </td>
                                                     <td class="right" width="60px">

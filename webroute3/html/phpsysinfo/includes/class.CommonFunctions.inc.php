@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.CommonFunctions.inc.php 570 2012-04-16 07:10:52Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -25,31 +25,6 @@
  */
 class CommonFunctions
 {
-    /**
-     * phpSysInfo version
-     *
-     * @var string
-     */
-    const PSI_VERSION = '3.0.17';
-
-    public static $PSI_VERSION_STRING = self::PSI_VERSION;
-
-    /**
-     * get svn version info
-     *
-     * @return  none
-     */
-    public static function checkForSVN()
-    {
-        if  (file_exists (dirname(__FILE__) . '/.svn/entries')){
-          restore_error_handler();
-          $contents = file_get_contents(dirname(__FILE__) . '/.svn/entries');
-          set_error_handler('errorHandlerPsi');
-          if ($contents && preg_match("/dir\n(.+)/", $contents, $matches))
-            self::$PSI_VERSION_STRING = self::PSI_VERSION."-r".$matches[1];
-        }
-    }
-
 
     /**
      * Find a system program, do also path checking when not running on WINNT
@@ -68,9 +43,12 @@ class CommonFunctions
         } else {
             $arrPath = preg_split('/:/', getenv("PATH"), -1, PREG_SPLIT_NO_EMPTY);
         }
-        if (PSI_ADD_PATHS !== false) {
-            $addpaths = preg_split('/,/', PSI_ADD_PATHS, -1, PREG_SPLIT_NO_EMPTY);
-            $arrPath = array_merge($addpaths, $arrPath); // In this order so $addpaths is before $arrPath when looking for a program
+        if ( defined('PSI_ADD_PATHS') && is_string(PSI_ADD_PATHS) ) {
+            if (preg_match(ARRAY_EXP, PSI_ADD_PATHS)) {
+                $arrPath = array_merge(eval(PSI_ADD_PATHS), $arrPath); // In this order so $addpaths is before $arrPath when looking for a program
+            } else {
+                $arrPath = array_merge(array(PSI_ADD_PATHS), $arrPath); // In this order so $addpaths is before $arrPath when looking for a program
+            }
         }
         //add some default paths if we still have no paths here
         if ( empty($arrPath) && PHP_OS != 'WINNT') {
@@ -85,7 +63,11 @@ class CommonFunctions
             if ((isset($open_basedir) && !in_array($strPath, $open_basedir)) || !is_dir($strPath)) {
                 continue;
             }
-            $strProgrammpath = $strPath."/".$strProgram;
+            if (PHP_OS == 'WINNT') {
+                $strProgrammpath = rtrim($strPath,'\\').'\\'.$strProgram;
+            } else {
+                $strProgrammpath = rtrim($strPath,"/")."/".$strProgram;
+            }
             if (is_executable($strProgrammpath)) {
                 return $strProgrammpath;
             }
@@ -243,7 +225,12 @@ class CommonFunctions
      */
     public static function checkForExtensions($arrExt = array())
     {
-        $arrReq = array('simplexml', 'pcre', 'xml', 'mbstring', 'dom');
+        if ( (PHP_OS == "Minix") || (PSI_SYSTEM_CHARSET == "UTF-8") )
+            $arrReq = array('simplexml', 'pcre', 'xml', 'dom');
+        else if (PHP_OS == "WINNT")
+            $arrReq = array('simplexml', 'pcre', 'xml', 'mbstring', 'dom', 'com_dotnet');
+        else
+            $arrReq = array('simplexml', 'pcre', 'xml', 'mbstring', 'dom');
         $extensions = array_merge($arrExt, $arrReq);
         $text = "";
         $error = false;
@@ -317,8 +304,15 @@ class CommonFunctions
      */
     public static function getPlugins()
     {
-        $plugins = preg_split("/[\s]?,[\s]?/", PSI_PLUGINS, -1, PREG_SPLIT_NO_EMPTY);
-        return $plugins;
+        if ( defined('PSI_PLUGINS') && is_string(PSI_PLUGINS) ) {
+            if (preg_match(ARRAY_EXP, PSI_PLUGINS)) {
+                return eval(strtolower(PSI_PLUGINS));
+            } else {
+                return array(strtolower(PSI_PLUGINS));
+            }
+        } else {
+            return array();
+        }
     }
 }
 ?>

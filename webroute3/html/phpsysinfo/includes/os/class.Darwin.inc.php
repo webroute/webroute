@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.Darwin.inc.php 567 2012-04-11 08:46:29Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -130,7 +130,10 @@ class Darwin extends BSDCommon
         $dev->setCpuSpeed(round($this->grabkey('hw.cpufrequency') / 1000000));
         $dev->setBusSpeed(round($this->grabkey('hw.busfrequency') / 1000000));
         $dev->setCache(round($this->grabkey('hw.l2cachesize')));
-        for ($i = $this->grabkey('hw.ncpu') ; $i > 0; $i--) {
+        $ncpu = $this->grabkey('hw.ncpu');
+        if ( is_null($ncpu) || (trim($ncpu) == "") || (!($ncpu >= 1)) )
+            $ncpu = 1;
+        for ($ncpu ; $ncpu > 0 ; $ncpu--) {
             $this->sys->setCpus($dev);
         }
     }
@@ -226,11 +229,16 @@ class Darwin extends BSDCommon
     {
         $s = $this->grabkey('hw.memsize');
         if (CommonFunctions::executeProgram('vm_stat', '', $pstat, PSI_DEBUG)) {
-            $lines = preg_split("/\n/", $pstat, -1, PREG_SPLIT_NO_EMPTY);
-            $ar_buf = preg_split("/\s+/", $lines[1], 19);
             // calculate free memory from page sizes (each page = 4MB)
+            if ( (preg_match('/^Pages free:\s+(\S+)/m', $pstat, $free_buf ))
+              && (preg_match('/^Pages speculative:\s+(\S+)/m', $pstat, $spec_buf )) ) {
+                $this->sys->setMemFree(($free_buf[1]+$spec_buf[1]) * 4 * 1024);
+            } else {
+                $lines = preg_split("/\n/", $pstat, -1, PREG_SPLIT_NO_EMPTY);
+                $ar_buf = preg_split("/\s+/", $lines[1], 19);
+                $this->sys->setMemFree($ar_buf[2] * 4 * 1024);
+            }
             $this->sys->setMemTotal($s);
-            $this->sys->setMemFree($ar_buf[2] * 4 * 1024);
             $this->sys->setMemUsed($this->sys->getMemTotal() - $this->sys->getMemFree());
 
             if (CommonFunctions::executeProgram('sysctl', 'vm.swapusage | colrm 1 22', $swapBuff, PSI_DEBUG)) {

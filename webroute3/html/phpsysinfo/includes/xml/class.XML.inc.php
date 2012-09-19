@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.XML.inc.php 573 2012-05-02 13:46:31Z jacky672 $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -130,6 +130,12 @@ class XML
         if ($this->_sys->getLoadPercent() !== null) {
             $vitals->addAttribute('CPULoad', $this->_sys->getLoadPercent());
         }
+        if ($this->_sysinfo->getLanguage() !== null) {
+            $vitals->addAttribute('Language', $this->_sysinfo->getLanguage());
+        }
+        if ($this->_sysinfo->getEncoding() !== null) {
+            $vitals->addAttribute('Charmap', $this->_sysinfo->getEncoding());
+        }
     }
     
     /**
@@ -140,7 +146,15 @@ class XML
     private function _buildNetwork()
     {
         $network = $this->_xml->addChild('Network');
-        $hideDevices = preg_split("/[\s]?,[\s]?/", PSI_HIDE_NETWORK_INTERFACE, -1, PREG_SPLIT_NO_EMPTY);
+        if ( defined('PSI_HIDE_NETWORK_INTERFACE') && is_string(PSI_HIDE_NETWORK_INTERFACE) ) {
+            if (preg_match(ARRAY_EXP, PSI_HIDE_NETWORK_INTERFACE)) {
+                $hideDevices = eval(PSI_HIDE_NETWORK_INTERFACE);
+            } else {
+                $hideDevices = array(PSI_HIDE_NETWORK_INTERFACE);
+            }
+        } else {
+            $hideDevices = array();
+        }
         foreach ($this->_sys->getNetDevices() as $dev) {
             if (!in_array(trim($dev->getName()), $hideDevices)) {
                 $device = $network->addChild('NetDevice');
@@ -302,14 +316,26 @@ class XML
     {
         $hideMounts = $hideFstypes = $hideDisks = array();
         $i = 1;
-        if (PSI_HIDE_MOUNTS !== "") {
-            $hideMounts = preg_split('/,/', PSI_HIDE_MOUNTS, -1, PREG_SPLIT_NO_EMPTY);
+        if ( defined('PSI_HIDE_MOUNTS') && is_string(PSI_HIDE_MOUNTS) ) {
+            if (preg_match(ARRAY_EXP, PSI_HIDE_MOUNTS)) {
+                $hideMounts = eval(PSI_HIDE_MOUNTS);
+            } else {
+                $hideMounts = array(PSI_HIDE_MOUNTS);
+            }
         }
-        if (PSI_HIDE_FS_TYPES !== "") {
-            $hideFstypes = preg_split('/,/', PSI_HIDE_FS_TYPES, -1, PREG_SPLIT_NO_EMPTY);
+        if ( defined('PSI_HIDE_FS_TYPES') && is_string(PSI_HIDE_FS_TYPES) ) {
+            if (preg_match(ARRAY_EXP, PSI_HIDE_FS_TYPES)) {
+                $hideFstypes = eval(PSI_HIDE_FS_TYPES);
+            } else {
+                $hideFstypes = array(PSI_HIDE_FS_TYPES);
+            }
         }
-        if (PSI_HIDE_DISKS !== "") {
-            $hideDisks = preg_split('/,/', PSI_HIDE_DISKS, -1, PREG_SPLIT_NO_EMPTY);
+        if ( defined('PSI_HIDE_DISKS') && is_string(PSI_HIDE_DISKS) ) {
+            if (preg_match(ARRAY_EXP, PSI_HIDE_DISKS)) {
+                $hideDisks = eval(PSI_HIDE_DISKS);
+            } else {
+                $hideDisks = array(PSI_HIDE_DISKS);
+            }
         }
         $fs = $this->_xml->addChild('FileSystem');
         foreach ($this->_sys->getDiskDevices() as $disk) {
@@ -432,6 +458,24 @@ class XML
     {
         if (!$this->_plugin_request || $this->_complete_request) {
             if ($this->_sys === null) {
+                if (PSI_DEBUG === true){
+                    // Safe mode check
+                    $safe_mode = @ini_get("safe_mode") ? TRUE : FALSE;
+                    if ($safe_mode) {
+                        $this->_errors->addError("WARN", "PhpSysInfo requires to set off 'safe_mode' in 'php.ini'");
+                    }
+                    // Include path check
+                    $include_path = @ini_get("include_path");
+                    if (($include_path)&&($include_path!="")) {
+                        $include_path = preg_replace("/(:)|(;)/", "\n", $include_path);
+                        if (preg_match("/^\.$/m", $include_path)) {
+                            $include_path = ".";
+                        }
+                    }
+                    if ($include_path != "." ) {
+                        $this->_errors->addError("WARN", "PhpSysInfo requires '.' inside the 'include_path' in php.ini");
+                    }
+                }
                 $this->_sys = $this->_sysinfo->getSys();
             }
             $this->_buildVitals();
@@ -497,12 +541,22 @@ class XML
         $this->_xml = new SimpleXMLExtended(simplexml_import_dom($dom), $this->_sysinfo->getEncoding());
         
         $generation = $this->_xml->addChild('Generation');
-        $generation->addAttribute('version', CommonFunctions::$PSI_VERSION_STRING);
+        $generation->addAttribute('version', PSI_VERSION_STRING);
         $generation->addAttribute('timestamp', time());
         $options = $this->_xml->addChild('Options');
-        $options->addAttribute('tempFormat', defined('PSI_TEMP_FORMAT') ? PSI_TEMP_FORMAT : 'c');
-        $options->addAttribute('byteFormat', defined('PSI_BYTE_FORMAT') ? PSI_BYTE_FORMAT : 'auto_binary');
-        $options->addAttribute('refresh', defined('PSI_REFRESH') ? PSI_REFRESH : 0);
+        $options->addAttribute('tempFormat', defined('PSI_TEMP_FORMAT') ? strtolower(PSI_TEMP_FORMAT) : 'c');
+        $options->addAttribute('byteFormat', defined('PSI_BYTE_FORMAT') ? strtolower(PSI_BYTE_FORMAT) : 'auto_binary');
+        if ( defined('PSI_REFRESH') ) {
+            if ( PSI_REFRESH === false) {
+                $options->addAttribute('refresh', 0);
+            } else if ( PSI_REFRESH === true) {
+                $options->addAttribute('refresh', 1);
+            } else {
+                $options->addAttribute('refresh', PSI_REFRESH);
+            }
+        } else {
+            $options->addAttribute('refresh', 60000);
+        }
         $options->addAttribute('showPickListTemplate', defined('PSI_SHOW_PICKLIST_TEMPLATE') ? (PSI_SHOW_PICKLIST_TEMPLATE ? 'true' : 'false') : 'false');
         $options->addAttribute('showPickListLang', defined('PSI_SHOW_PICKLIST_LANG') ? (PSI_SHOW_PICKLIST_LANG ? 'true' : 'false') : 'false');
         $plug = $this->_xml->addChild('UsedPlugins');

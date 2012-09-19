@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-####--- version 3.1.0 ---####
+####--- version 3.2.2 ---####
 
 import os, MySQLdb
 from datetime import date
@@ -202,7 +202,7 @@ class Base(object):
     def __init__(self):
         self.dump = """/usr/bin/mysqldump -uroot -pzvercd123 webroute | /bin/gzip -c > /root/backup/wbr`date "+%Y-%m-%d"`.gz"""
         self.find = """/bin/find /root/backup -name "*.gz" -mtime +10 -exec /bin/rm -f {} \;"""
-        self.last_year_dump = """/usr/bin/mysqldump -uroot -pzvercd123 webroute | /bin/gzip -c > /root/backup/last_year_trafick-`date "+%Y-%m-%d"`.gzip"""
+        self.last_year_dump = """/usr/bin/mysqldump -uroot -pzvercd123 webroute | /bin/gzip -c > /root/backup/last_year_traffic-`date '+%Y-%m-%d'`.gzip"""
 
     def backup(self):
         os.system(self.dump)
@@ -214,3 +214,16 @@ class Base(object):
         cursor = db.cursor()
         rem_last_year = "DELETE FROM `traf` WHERE `date` LIKE '"+ last_year +"%'"
         cursor.execute(rem_last_year)
+
+    def clean_db(self):
+        db = MySQLdb.connect(host='localhost', user='webroute', passwd='wbr', db='webroute')
+        cursor = db.cursor()
+        rem_zero = """DELETE FROM `traf` WHERE `in`='0' AND `out`='0'"""
+        optimize_tables ="""OPTIMIZE TABLE `config`, `conn_speed`, `ip_temp`, `l7filter`, `l7protocols`, `quota`, `rej_abs_exc`, `rej_categories`, `rej_exc`, `rej_usr_exc`, `report_except`, `sites`, `speed`, `traf`, `users` """
+        cursor.execute(rem_zero)
+        cursor.execute(optimize_tables)
+
+    def clean_netflow_trash(self):
+        find_trash = """/bin/find /var/flow-tools -name "*" -mmin +5 -exec /bin/rm -f {} \;"""
+        os.system(find_trash)
+

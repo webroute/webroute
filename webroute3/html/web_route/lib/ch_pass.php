@@ -1,4 +1,5 @@
 <?php
+//###--- version 3.2.0 ---####//
 include 'sql_to_chap.php';
 function ch_password($user, $password)
 {
@@ -6,7 +7,7 @@ function ch_password($user, $password)
     $db_host = 'localhost';
     $link = mysql_connect($db_host, 'webroute', 'wbr') or die(mysql_error());
     mysql_select_db('webroute', $link) or die(mysql_error());
-    $query = "UPDATE  `webroute`.`users` SET  `password` =  '$password' WHERE  `users`.`id` ='$user' LIMIT 1";
+    $query = "UPDATE  `webroute`.`users` SET  `password` =  '$password' WHERE  `users`.`login` ='$user' LIMIT 1";
     mysql_query($query) or $result = 0;
     return $result;
 }
@@ -29,39 +30,39 @@ $link = mysql_connect($db_host, 'webroute', 'wbr') or die(mysql_error());
 mysql_select_db('webroute', $link) or die(mysql_error());
 $get_usr = "SELECT `id`, `login` FROM `users` order by `login`";
 $g_usr = mysql_query($get_usr);
-echo "<table><tr><td><div align=\"left\">\n";
+echo "<table align='center'><tr><td><div align=\"center\">\n";
 echo "<form method=\"POST\">\n";
-echo "&nbsp;пользователь\n<br/>";
-echo "<select name=\"user_id\" size=\"1\">\n";
-echo "<option disabled>выберите пользователя</option>\n";
-while($usr = mysql_fetch_assoc($g_usr))
-  {
-    echo "<option value=\"" . $usr['id'] . "\">" . $usr['login'] . "</option>\n";
-  }
-echo "</select><br/>\n";
-echo "&nbsp;новый пароль\n<br/>";
-echo "<input type=\"text\" name=\"pass\">\n";
+echo "&nbsp;<font color='blue'>Смена пароля для пользователя ".$_GET['usr'].".</font>\n<br/><br/>";
+echo "новый пароль: <input type=\"text\" name=\"pass\">\n";
 echo "<br/><br/>&nbsp\n";
 echo "<input type=\"submit\" name=\"submit\" value=\"сменить пароль\">\n";
+echo "<input type=\"submit\" name=\"cancel\" value=\"отмена\">\n";
+echo "<input type='hidden' name='usr' value='".$_GET['usr']."'>";
 echo "</form>\n";
 echo "</div></td></tr></table>\n";
 if (isset ($_POST['submit']))
 {
-    $user_id = $_POST['user_id'];
+    $user_id = $_POST['usr'];
     $pass = $_POST['pass'];
-    //$user_ok = preg_match('/^[a-zA-Z0-9]+$/', $login);
     $pass_ok = preg_match('/^[a-zA-Z0-9]+$/', $pass);
     if($pass_ok == 1)
     {
     ch_password($user_id, $pass);
     sql_to_chap();
     mysql_close($link);
+    echo '<script language=\'javascript\'>setTimeout("window.location = \"/web_route/admin/index.php?act=v_usr\"", 100);</script>';
     }
     else
     {
         echo 'Пароль должен состоять из латинских букв и/или цифр';
     }
 }
+
+if (isset ($_POST['cancel']))
+{
+    echo '<script language=\'javascript\'>window.location = "/web_route/admin/index.php?act=v_usr"</script>';
+}
+
 }
 else
 {
@@ -76,6 +77,7 @@ else
         echo "<input type=\"text\" name=\"pass\">\n";
         echo "<br/><br/>&nbsp\n";
         echo "<input type=\"submit\" name=\"submit\" value=\"сменить пароль\">\n";
+        echo "<input type=\"submit\" name=\"cancel\" value=\"отмена\">\n";
         echo "</form>\n";
         echo "</div>\n";
         if (isset ($_POST['submit']))

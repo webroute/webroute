@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.FreeBSD.inc.php 556 2012-04-01 12:02:30Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -134,8 +134,8 @@ class FreeBSD extends BSDCommon
     {
         $pagesize = $this->grabkey("hw.pagesize");
         $this->sys->setMemCache($this->grabkey("vm.stats.vm.v_cache_count") * $pagesize);
-        $this->sys->setMemApplication($this->grabkey("vm.stats.vm.v_active_count") * $pagesize);
-        $this->sys->setMemBuffer($this->sys->getMemTotal() - $this->sys->getMemApplication() - $this->sys->getMemCache());
+        $this->sys->setMemApplication(($this->grabkey("vm.stats.vm.v_active_count") + $this->grabkey("vm.stats.vm.v_wire_count")) * $pagesize);
+        $this->sys->setMemBuffer($this->sys->getMemUsed() - $this->sys->getMemApplication() - $this->sys->getMemCache());
     }
 
     

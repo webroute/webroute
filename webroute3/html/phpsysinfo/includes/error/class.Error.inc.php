@@ -9,7 +9,7 @@
  * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
  * @copyright 2009 phpSysInfo
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @version   SVN: $Id: class.Error.inc.php 569 2012-04-16 06:08:18Z namiltd $
+ * @version   SVN: $Id$
  * @link      http://phpsysinfo.sourceforge.net
  */
  /**
@@ -161,7 +161,7 @@ class Error
         $dom->appendChild($root);
         $xml = new SimpleXMLExtended(simplexml_import_dom($dom), 'UTF-8');
         $generation = $xml->addChild('Generation');
-        $generation->addAttribute('version', CommonFunctions::$PSI_VERSION_STRING);
+        $generation->addAttribute('version', PSI_VERSION_STRING);
         $generation->addAttribute('timestamp', time());
         $xmlerr = $xml->addChild("Errors");
         foreach ($this->_arrErrorList as $arrLine) {
